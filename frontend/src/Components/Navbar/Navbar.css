@@ -1,0 +1,22 @@
+.navbar{
+  background-color: #3e73d9;
+  display: flex;
+  margin: 0;
+}
+
+.nav-ul {
+  list-style: none;
+  display: flex;
+  gap: 50px;
+  margin: 15px;
+}
+
+.nav-ul li{
+  border: 1px solid white;
+  border-radius: 15px;
+  padding: 10px;
+}
+a {
+  text-decoration: none;
+  color: white;
+}
