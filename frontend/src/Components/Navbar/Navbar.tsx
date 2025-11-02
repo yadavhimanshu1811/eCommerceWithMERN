@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
+import eCart from '../../assets/eCart.jpg';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("user");
+  const auth = localStorage.getItem("user");
 
   const logout = () => {
     localStorage.removeItem("user");
@@ -11,7 +12,8 @@ const Navbar = () => {
   };
   return (
     <div className="navbar">
-      {isAuthenticated ? (
+      <img src={eCart} alt="logo"/>
+      {auth ? (
         <ul className="nav-ul">
           <li>
             <Link to="/">Products</Link>
@@ -23,7 +25,7 @@ const Navbar = () => {
             <Link to="/update">Update Product</Link>
           </li>
           <li>
-            <Link onClick={logout} to="/signup">
+            <Link onClick={logout} to="/login">
               Logout
             </Link>
           </li>
