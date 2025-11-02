@@ -4,6 +4,7 @@ const cors = require("cors");
 
 require("./db/config");
 const User = require("./db/User");
+const Product = require("./db/Product");
 const app = express();
 
 app.use(express.json());
@@ -32,6 +33,13 @@ app.post("/login", async (req, resp)=>{
             resp.send({error: "No User found. Either Email or password is wrong"});
         }
     }
+})
+
+//Add product API
+app.post("/addproduct", async(req, resp)=>{
+    let product = new Product(req.body);
+    let result = product.save();
+    resp.send(result);
 })
 
 
