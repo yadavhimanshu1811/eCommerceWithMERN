@@ -10,27 +10,32 @@ const Signup = () => {
   });
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     const isAuthenticated = localStorage.getItem("user");
-    if(isAuthenticated){
+    if (isAuthenticated) {
       navigate("/");
     }
-  })
+  });
 
   const submitdetails = async () => {
-    let result = await fetch("http://localhost:3000/register", {
-      method: "post",
-      body: JSON.stringify(userDetails),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    result = await result.json();
+    const { name, email, password } = userDetails;
+    if (!name || !email || !password) {
+      alert("Please enter appropriate entries");
+    } else {
+      let result = await fetch("http://localhost:3000/register", {
+        method: "post",
+        body: JSON.stringify(userDetails),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      result = await result.json();
 
-    localStorage.setItem("user", JSON.stringify(result));
+      localStorage.setItem("user", JSON.stringify(result));
 
-    console.log(result);
-    navigate("/");
+      console.log(result);
+      navigate("/");
+    }
   };
 
   return (

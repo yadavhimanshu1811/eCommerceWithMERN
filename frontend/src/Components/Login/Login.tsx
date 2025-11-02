@@ -26,20 +26,25 @@ const Login = () => {
   });
 
   const handleLogin = async () => {
-    const response = await fetch("http://localhost:3000/login", {
-      method: "post",
-      body: JSON.stringify(loginDetails),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const result: LoginSuccess | LoginError = await response.json();
-    if ("name" in result) {
-      //TODO resolve typescript error
-      localStorage.setItem("user", JSON.stringify(result));
-      navigate("/");
+    const {email, password } = loginDetails;
+    if (!email || !password) {
+      alert("Please enter appropriate entries");
     } else {
-      alert(result.error);
+      const response = await fetch("http://localhost:3000/login", {
+        method: "post",
+        body: JSON.stringify(loginDetails),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result: LoginSuccess | LoginError = await response.json();
+      if ("name" in result) {
+        //TODO resolve typescript error
+        localStorage.setItem("user", JSON.stringify(result));
+        navigate("/");
+      } else {
+        alert(result.error);
+      }
     }
   };
 
