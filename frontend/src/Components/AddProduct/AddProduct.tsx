@@ -23,7 +23,14 @@ export const AddProduct = () => {
         },
       });
       const result = await response.json();
-      console.log("result", result);
+      if (result) {
+        setProductDetails({
+          name: "",
+          price: "",
+          category: "",
+          company: "",
+        });
+      }
     }
   };
 

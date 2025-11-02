@@ -49,6 +49,12 @@ app.get("/getproducts", async(req, resp)=>{
     // if(product.length == 0){}    // handle this here or at UI
 })
 
+//Delete product API
+app.delete("/deleteproduct/:id", async(req, resp)=>{
+    let result = await Product.deleteOne({_id: req.params.id});
+    resp.send(result);
+});
+
 
 // app.listen(3000);
 
