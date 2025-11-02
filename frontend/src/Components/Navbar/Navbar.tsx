@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import eCart from '../../assets/eCart.jpg';
+import eCart from "../../assets/eCart.jpg";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Navbar = () => {
   };
   return (
     <div className="navbar">
-      <img src={eCart} alt="logo"/>
+      <img src={eCart} alt="logo" />
       {auth ? (
         <ul className="nav-ul">
           <li>
@@ -25,12 +25,12 @@ const Navbar = () => {
             <Link to="/update">Update Product</Link>
           </li>
           <li>
+            <Link to="/profile">Profile</Link>
+          </li>
+          <li>
             <Link onClick={logout} to="/login">
               Logout
             </Link>
-          </li>
-          <li>
-            <Link to="/profile">Profile</Link>
           </li>
         </ul>
       ) : (
