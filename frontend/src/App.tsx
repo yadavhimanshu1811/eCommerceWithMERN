@@ -5,6 +5,7 @@ import Signup from "./Components/SignUp/Signup";
 import PrivateComponent from "./Components/PrivateComponent";
 import Login from "./Components/Login/Login";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AddProduct from "./Components/AddProduct/AddProduct";
 
 function App() {
   const router = createBrowserRouter([
@@ -42,6 +43,7 @@ function App() {
           element: (
             <>
               <Navbar />
+              <AddProduct/>
             </>
           ),
         },

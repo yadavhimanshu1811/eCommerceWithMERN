@@ -20,7 +20,7 @@ const Signup = () => {
   const submitdetails = async () => {
     const { name, email, password } = userDetails;
     if (!name || !email || !password) {
-      alert("Please enter appropriate entries");
+      alert("Please enter appropriate entries"); //TODO handle error for each input
     } else {
       let result = await fetch("http://localhost:3000/register", {
         method: "post",
