@@ -1,6 +1,7 @@
 .footer-div{
     background-color: #3e73d9;
     display: flex;
+    justify-content: center;
     color: white;
     position: absolute;
     bottom: 0;
