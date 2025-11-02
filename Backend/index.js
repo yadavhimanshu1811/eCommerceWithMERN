@@ -42,6 +42,13 @@ app.post("/addproduct", async(req, resp)=>{
     resp.send(result);
 })
 
+//Get product API
+app.get("/getproducts", async(req, resp)=>{
+    let product = await Product.find();
+    resp.send(product);
+    // if(product.length == 0){}    // handle this here or at UI
+})
+
 
 // app.listen(3000);
 
