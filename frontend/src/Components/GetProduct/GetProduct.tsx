@@ -6,6 +6,7 @@ interface Product {
   category: string;
   company: string;
   price: string;
+  _id: string;
 }
 
 const GetProduct = () => {
@@ -38,7 +39,7 @@ const GetProduct = () => {
         {products.length ? (
           products.map((item: Product, index:number) => {
             return (
-              <div className="row">
+              <div className="row" key={item._id}>
                 <div className="cell">{index+1}</div>
                 <div className="cell">{item.name}</div>
                 <div className="cell">{item.price}</div>
