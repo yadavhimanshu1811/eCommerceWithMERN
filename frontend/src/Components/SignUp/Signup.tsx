@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Signup.css";
 
@@ -10,20 +10,28 @@ const Signup = () => {
   });
   const navigate = useNavigate();
 
-  const submitdetails = async () =>{
-    let result = await fetch ("http://localhost:3000/register", {
-      method: 'post',
-      body:JSON.stringify(userDetails),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    result = await result.json()
-    if(result){
+  useEffect(()=>{
+    const isAuthenticated = localStorage.getItem("user");
+    if(isAuthenticated){
       navigate("/");
     }
+  })
+
+  const submitdetails = async () => {
+    let result = await fetch("http://localhost:3000/register", {
+      method: "post",
+      body: JSON.stringify(userDetails),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    result = await result.json();
+
+    localStorage.setItem("user", JSON.stringify(result));
+
     console.log(result);
-  }
+    navigate("/");
+  };
 
   return (
     <div>
