@@ -11,12 +11,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-//making API route
+//sigmnupAPI
 app.post("/register", async (req, resp)=>{
     let user = new User(req.body);
     let result = await user.save();
     result = result.toObject();
-    delete result.password
+    delete result.password //TODO 
     resp.send(result)
 })
 
@@ -39,7 +39,7 @@ app.post("/login", async (req, resp)=>{
 //Add product API
 app.post("/addproduct", async(req, resp)=>{
     let product = new Product(req.body);
-    let result = product.save();
+    let result = await product.save();
     resp.send(result);
 })
 
@@ -56,7 +56,7 @@ app.get("/getproduct/:id", async (req, res) => {
     const id = req.params.id;
 
     // check if valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) { //TODO revise
       return res.status(400).send({ error: "Invalid product ID" });
     }
 
@@ -99,9 +99,9 @@ app.delete("/deleteproduct/:id", async(req, resp)=>{
 //Search API
 app.get("/search/:key", async(req, resp)=>{
     let result = await Product.find({
-        "$or":[
+        "$or":[ //TODO revise
             { name:{$regex:req.params.key}}, //add whatever keys to check
-            { company:{$regex:req.params.key, $options: "i"}}, //for lower/upper case insensitivity
+            { company:{$regex:req.params.key, $options: "i"}}, //for lower&upper case insensitivity
         ]
     })
     resp.send(result);

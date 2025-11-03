@@ -34,7 +34,7 @@ const GetProduct = () => {
     getProducts();
   }, []);
 
-  let debounceTimer:ReturnType<typeof setTimeout>;  
+  let debounceTimer:ReturnType<typeof setTimeout>;  //TODO revise
   
 
   const handleSearch = (searchString: string) => {
@@ -61,6 +61,7 @@ const GetProduct = () => {
         <input
           placeholder="Search product"
           onChange={(e) => handleSearch(e.target.value)}
+          // TODO useRef
         />
 
         <div className="row">
