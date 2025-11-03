@@ -7,6 +7,7 @@ import Login from "./Components/Login/Login";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AddProduct from "./Components/AddProduct/AddProduct";
 import GetProduct from "./Components/GetProduct/GetProduct";
+import Updateproduct from "./Components/Updateproduct/Updateproduct";
 
 function App() {
   const router = createBrowserRouter([
@@ -50,10 +51,11 @@ function App() {
           ),
         },
         {
-          path: "/update",
+          path: "/update/:id",
           element: (
             <>
               <Navbar />
+              <Updateproduct/>
             </>
           ),
         },

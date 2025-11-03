@@ -1,6 +1,7 @@
 
 const express = require('express');
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 require("./db/config");
 const User = require("./db/User");
@@ -47,6 +48,46 @@ app.get("/getproducts", async(req, resp)=>{
     let product = await Product.find();
     resp.send(product);
     // if(product.length == 0){}    // handle this here or at UI
+})
+
+//Get one product API
+app.get("/getproduct/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // check if valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).send({ error: "Invalid product ID" });
+    }
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).send({ error: "No product found with this ID" });
+    }
+
+    res.send(product);
+  } catch (err) {
+    console.error("Error fetching product:", err);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
+});
+
+//Update Product API
+app.put("/updateproduct/:id", async(req, resp)=>{
+    try{
+        const result = await Product.updateOne(
+            {_id: req.params.id},
+            {$set: req.body}
+        )
+
+        if(result.matchedCount == 0){
+            return resp.status(404).send({ error: "No product found with this ID" });
+        }
+        resp.send(result);
+    }catch(err){
+        console.error("Error updating product:", err);
+        resp.status(500).send({ error: "Internal Server Error" });
+    }
 })
 
 //Delete product API

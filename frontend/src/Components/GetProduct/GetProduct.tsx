@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./GetProduct.css";
+import { Link } from "react-router-dom";
 
 interface Product {
   name: string;
@@ -63,6 +64,7 @@ const GetProduct = () => {
                   <button onClick={() => deleteProduct(item._id)}>
                     Delete
                   </button>
+                  <Link to={`/update/${item._id}`}>Update</Link>
                 </div>
               </div>
             );
