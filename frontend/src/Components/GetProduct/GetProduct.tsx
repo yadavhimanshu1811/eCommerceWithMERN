@@ -34,7 +34,8 @@ const GetProduct = () => {
     getProducts();
   }, []);
 
-  let debounceTimer: NodeJS.Timeout;   //TODO resolve this error of typescript
+  let debounceTimer:ReturnType<typeof setTimeout>;  
+  
 
   const handleSearch = (searchString: string) => {
     clearTimeout(debounceTimer);
