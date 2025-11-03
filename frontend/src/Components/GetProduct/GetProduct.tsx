@@ -21,14 +21,11 @@ const GetProduct = () => {
   };
 
   const deleteProduct = async (id: string) => {
-    const response = await fetch(
-      `http://localhost:3000/deleteproduct/${id}`,
-      {
-        method: "delete",
-      }
-    );
+    const response = await fetch(`http://localhost:3000/deleteproduct/${id}`, {
+      method: "delete",
+    });
     const result = await response.json();
-    if(result){
+    if (result) {
       getProducts();
     }
   };
@@ -37,20 +34,43 @@ const GetProduct = () => {
     getProducts();
   }, []);
 
+  let debounceTimer: NodeJS.Timeout;   //TODO resolve this error of typescript
+
+  const handleSearch = (searchString: string) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async() => {
+      if (searchString.trim()) {
+        const response = await fetch(
+          `http://localhost:3000/search/${searchString}`
+        );
+        const result = await response.json();
+        if (result) {
+          setProducts(result);
+        }
+      } else {
+        getProducts();
+      }
+    }, 500); // ⏱️ wait 500ms after typing stops
+  };
+
   return (
     <div className="product-container">
       <div>
         <h1>Products List</h1>
-        {products.length ? (
-          <div className="row">
-            <div className="cell-header">S.no</div>
-            <div className="cell-header">name</div>
-            <div className="cell-header">price</div>
-            <div className="cell-header">company</div>
-            <div className="cell-header">category</div>
-            <div className="cell-header">Actions</div>
-          </div>
-        ) : null}
+        <input
+          placeholder="Search product"
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+
+        <div className="row">
+          <div className="cell-header">S.no</div>
+          <div className="cell-header">name</div>
+          <div className="cell-header">price</div>
+          <div className="cell-header">company</div>
+          <div className="cell-header">category</div>
+          <div className="cell-header">Actions</div>
+        </div>
+
         {products.length ? (
           products.map((item: Product, index: number) => {
             return (
@@ -70,7 +90,7 @@ const GetProduct = () => {
             );
           })
         ) : (
-          <div>No products are added</div>
+          <h1>No products found</h1>
         )}
       </div>
     </div>

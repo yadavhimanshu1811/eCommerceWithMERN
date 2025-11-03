@@ -96,8 +96,18 @@ app.delete("/deleteproduct/:id", async(req, resp)=>{
     resp.send(result);
 });
 
+//Search API
+app.get("/search/:key", async(req, resp)=>{
+    let result = await Product.find({
+        "$or":[
+            { name:{$regex:req.params.key}}, //add whatever keys to check
+            { company:{$regex:req.params.key, $options: "i"}}, //for lower/upper case insensitivity
+        ]
+    })
+    resp.send(result);
+})
 
-// app.listen(3000);
+app.listen(3000);
 
 
 // Only mongoDB
@@ -112,11 +122,7 @@ app.delete("/deleteproduct/:id", async(req, resp)=>{
 // connectDB();
 
 
-//only express
-app.get("/", (req, resp)=>{
-    resp.send("Hi Himanshu, your app is running")
-});
-app.listen(3000)
+
 
 
 
