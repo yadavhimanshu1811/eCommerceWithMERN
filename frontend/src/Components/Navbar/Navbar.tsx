@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import eCart from "../../assets/eCart.jpg";
 
@@ -17,27 +17,68 @@ const Navbar = () => {
       {auth ? (
         <ul className="nav-ul">
           <li>
-            <Link to="/">Products</Link>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive ? "active-link" : "non-active"
+              }
+            >
+              Products
+            </NavLink>
           </li>
           <li>
-            <Link to="/add">Add Product</Link>
+            <NavLink
+              to="/add"
+              className={({ isActive }) =>
+                isActive ? "active-link" : "non-active"
+              }
+            >
+              Add Product
+            </NavLink>
           </li>
           <li>
-            <Link to="/profile">Profile</Link>
+            <NavLink
+              to="/profile"
+              className={({ isActive }) =>
+                isActive ? "active-link" : "non-active"
+              }
+            >
+              Profile
+            </NavLink>
           </li>
           <li>
-            <Link onClick={logout} to="/login">
+            <NavLink
+              onClick={logout}
+              to="/login"
+              className={({ isActive }) =>
+                isActive ? "active-link" : "non-active"
+              }
+            >
               Logout
-            </Link>
+            </NavLink>
           </li>
         </ul>
       ) : (
         <ul className="nav-ul">
           <li>
-            <Link to="/signup">Sign up</Link>
+            <NavLink
+              to="/signup"
+              className={({ isActive }) =>
+                isActive ? "active-link" : "non-active"
+              }
+            >
+              Sign up
+            </NavLink>
           </li>
           <li>
-            <Link to="/login">Login</Link>
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                isActive ? "active-link" : "non-active"
+              }
+            >
+              Login
+            </NavLink>
           </li>
         </ul>
       )}
