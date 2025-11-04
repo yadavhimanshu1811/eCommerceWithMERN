@@ -14,7 +14,12 @@ const GetProduct = () => {
   const [products, setProducts] = useState([]);
 
   const getProducts = async () => {
-    const response = await fetch("http://localhost:3000/getproducts"); //TODO add pagination later
+    //TODO add pagination later
+    const response = await fetch("http://localhost:3000/getproducts", {
+      headers: {
+        authorization: JSON.parse(localStorage.getItem("token") || ""),
+      },
+    });
     const result = await response.json();
     console.log("get product", result);
     setProducts(result);
@@ -23,6 +28,9 @@ const GetProduct = () => {
   const deleteProduct = async (id: string) => {
     const response = await fetch(`http://localhost:3000/deleteproduct/${id}`, {
       method: "delete",
+      headers: {
+        authorization: JSON.parse(localStorage.getItem("token") || ""),
+      },
     });
     const result = await response.json();
     if (result) {
@@ -41,7 +49,12 @@ const GetProduct = () => {
     debounceTimer = setTimeout(async () => {
       if (searchString.trim()) {
         const response = await fetch(
-          `http://localhost:3000/search/${searchString}`
+          `http://localhost:3000/search/${searchString}`,
+          {
+            headers: {
+              authorization: JSON.parse(localStorage.getItem("token") || ""),
+            },
+          }
         );
         const result = await response.json();
         if (result) {

@@ -2,6 +2,8 @@
 const express = require('express');
 const cors = require("cors");
 const mongoose = require("mongoose");
+const Jwt = require("jsonwebtoken");
+const jwtKey = "yadavhimanshu-ecom"
 
 require("./db/config");
 const User = require("./db/User");
@@ -17,7 +19,12 @@ app.post("/register", async (req, resp)=>{
     let result = await user.save();
     result = result.toObject();
     delete result.password //TODO 
-    resp.send(result)
+    Jwt.sign({result},jwtKey,{expiresIn:"2h"}, (err, token)=>{
+        if(err){
+            resp.send({error: "Something went wrong"});
+        }
+        resp.send({user:result, auth:token});
+    })
 })
 
 //login API
@@ -29,7 +36,13 @@ app.post("/login", async (req, resp)=>{
     if(req.body.email && req.body.password){
         let user = await User.findOne(req.body).select("-password");
         if(user){
-            resp.send(user);
+            Jwt.sign({user},jwtKey,{expiresIn:"2h"}, (err, token)=>{
+                if(err){
+                    resp.send({error: "Something went wrong"});
+                }
+                resp.send({user, auth:token});
+            })
+            
         }else {
             resp.send({error: "No User found. Either Email or password is wrong"});
         }
@@ -37,21 +50,20 @@ app.post("/login", async (req, resp)=>{
 })
 
 //Add product API
-app.post("/addproduct", async(req, resp)=>{
+app.post("/addproduct",verifyToken, async(req, resp)=>{
     let product = new Product(req.body);
     let result = await product.save();
     resp.send(result);
 })
 
 //Get product API
-app.get("/getproducts", async(req, resp)=>{
+app.get("/getproducts",verifyToken, async(req, resp)=>{
     let product = await Product.find();
     resp.send(product);
-    // if(product.length == 0){}    // handle this here or at UI
 })
 
 //Get one product API
-app.get("/getproduct/:id", async (req, res) => {
+app.get("/getproduct/:id",verifyToken, async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -73,7 +85,7 @@ app.get("/getproduct/:id", async (req, res) => {
 });
 
 //Update Product API
-app.put("/updateproduct/:id", async(req, resp)=>{
+app.put("/updateproduct/:id",verifyToken, async(req, resp)=>{
     try{
         const result = await Product.updateOne(
             {_id: req.params.id},
@@ -91,13 +103,13 @@ app.put("/updateproduct/:id", async(req, resp)=>{
 })
 
 //Delete product API
-app.delete("/deleteproduct/:id", async(req, resp)=>{
+app.delete("/deleteproduct/:id",verifyToken, async(req, resp)=>{
     let result = await Product.deleteOne({_id: req.params.id});
     resp.send(result);
 });
 
 //Search API
-app.get("/search/:key", async(req, resp)=>{
+app.get("/search/:key",verifyToken, async(req, resp)=>{
     let result = await Product.find({
         "$or":[ //TODO revise
             { name:{$regex:req.params.key}}, //add whatever keys to check
@@ -106,6 +118,22 @@ app.get("/search/:key", async(req, resp)=>{
     })
     resp.send(result);
 })
+
+function verifyToken(req, resp, next){ //middleware
+    let token = req.headers["authorization"];
+    if(token){
+        // token.split(' ')     if token contains "bearer" at start
+        Jwt.verify(token, jwtKey, (err, valid)=>{
+            if(err){
+                resp.status(401).send({error: "Invalid authorization"})
+            }else{
+                next();
+            }
+        })
+    }else{
+        resp.status(403).send({error: "No token"})
+    }
+}
 
 app.listen(3000);
 

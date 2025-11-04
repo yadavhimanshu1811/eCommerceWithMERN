@@ -8,6 +8,7 @@ const Navbar = () => {
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/signup");
   };
   return (

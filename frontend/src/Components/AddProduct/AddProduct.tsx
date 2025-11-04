@@ -20,6 +20,7 @@ export const AddProduct = () => {
         body: JSON.stringify({ ...productDetails, userID }),
         headers: {
           "Content-Type": "application/json",
+          "authorization": JSON.parse(localStorage.getItem("token") || "")
         },
       });
       const result = await response.json();

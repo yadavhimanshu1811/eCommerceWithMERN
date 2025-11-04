@@ -16,7 +16,11 @@ const Updateproduct = () => {
 
   const getProductDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/getproduct/${id}`);
+      const response = await fetch(`http://localhost:3000/getproduct/${id}`,{
+        headers:{
+          authorization: JSON.parse(localStorage.getItem("token") || "")
+        }
+      });
       const data = await response.json();
 
       if (!response.ok) {
@@ -48,6 +52,7 @@ const Updateproduct = () => {
       body: JSON.stringify(productdetails),
       headers: {
         "Content-Type": "application/json",
+        authorization: JSON.parse(localStorage.getItem("token") || "")
       },
     });
     const result = await response.json();

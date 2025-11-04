@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 interface LoginSuccess {
-  name: string;
-  email: string;
-  id: any;
+  user: { name: string; email: string; id: any },
+  auth: string
 }
 
 interface LoginError {
@@ -39,12 +38,13 @@ const Login = () => {
         },
       });
       const result: LoginSuccess | LoginError = await response.json();
-      if ("name" in result) {
-        //TODO resolve typescript error
-        localStorage.setItem("user", JSON.stringify(result));
-        navigate("/");
-      } else {
+      if ("error" in result) {
         alert(result.error);
+        //TODO resolve typescript error
+      } else {
+        localStorage.setItem("user", JSON.stringify(result.user));
+        localStorage.setItem("token", JSON.stringify(result.auth));
+        navigate("/");
       }
     }
   };
