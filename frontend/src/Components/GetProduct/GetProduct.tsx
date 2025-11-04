@@ -73,25 +73,30 @@ const GetProduct = () => {
         </div>
 
         {products.length ? (
-          products.map((item: Product, index: number) => {
-            return (
-              <div className="row" key={item._id}>
-                <div className="cell">{index + 1}</div>
-                <div className="cell">{item.name}</div>
-                <div className="cell">{item.price}</div>
-                <div className="cell">{item.company}</div>
-                <div className="cell">{item.category}</div>
-                <div className="cell">
-                  <button className="delete-btn" onClick={() => deleteProduct(item._id)}>
-                    Delete
-                  </button>
-                  <Link to={`/update/${item._id}`}>
-                    <button>Update</button>
-                  </Link>
+          <div className="product-list">
+            {products.map((item: Product, index: number) => {
+              return (
+                <div className="row" key={item._id}>
+                  <div className="cell">{index + 1}</div>
+                  <div className="cell">{item.name}</div>
+                  <div className="cell">{item.price}</div>
+                  <div className="cell">{item.company}</div>
+                  <div className="cell">{item.category}</div>
+                  <div className="cell">
+                    <button
+                      className="delete-btn"
+                      onClick={() => deleteProduct(item._id)}
+                    >
+                      Delete
+                    </button>
+                    <Link to={`/update/${item._id}`}>
+                      <button>Update</button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            );
-          })
+              );
+            })}
+          </div>
         ) : (
           <h1>No products found</h1>
         )}
