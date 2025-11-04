@@ -13,7 +13,8 @@
     align-items: center;
     margin-top: 20px;
     padding: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 30px rgb(104, 101, 101);
+    border-radius: 15px;
 }
 
 .product-detail{

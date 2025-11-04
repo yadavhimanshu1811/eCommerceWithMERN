@@ -2,44 +2,51 @@ import { useState } from "react";
 import "./Profile.css";
 
 const Profile = () => {
- const getStoredUser = () => {
-  try {
-    const stored = localStorage.getItem("user");
-    if (stored) {
-      return JSON.parse(stored);
+  const getStoredUser = () => {
+    try {
+      const stored = localStorage.getItem("user");
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error("Error parsing user from localStorage:", error);
     }
-  } catch (error) {
-    console.error("Error parsing user from localStorage:", error);
-  }
-  // default (in case of error or missing data)
-  return { name: "", email: "" };
-};
+    // default (in case of error or missing data)
+    return { name: "", email: "" };
+  };
 
-const [userDetail, setUserDetail] = useState(getStoredUser());
+  const [userDetail, setUserDetail] = useState(getStoredUser());
 
   //TODO
   //edit user details
   //change password
 
-  const handleUpdateUser = async() =>{
-    const response = await fetch(`http://localhost:3000/updateuser/${userDetail._id}`, {
-      method: "put",
-      body: JSON.stringify(userDetail),
-      headers: {
-        "Content-Type": "application/json",
-        authorization: JSON.parse(localStorage.getItem("token") || ""),
-      },
-    });
+  const handleUpdateUser = async () => {
+    const { name, email } = userDetail;
+    if (!name || !email) {
+      alert("Please add correct details");
+      return false;
+    }
+    const response = await fetch(
+      `http://localhost:3000/updateuser/${userDetail._id}`,
+      {
+        method: "put",
+        body: JSON.stringify(userDetail),
+        headers: {
+          "Content-Type": "application/json",
+          authorization: JSON.parse(localStorage.getItem("token") || ""),
+        },
+      }
+    );
     const result = await response.json();
     // console.log("result", result);
     if ("error" in result) {
       alert(result.error);
     } else {
-        localStorage.setItem("user", JSON.stringify(userDetail));
-    //   navigate("/");
+      localStorage.setItem("user", JSON.stringify(userDetail));
+      //   navigate("/");
     }
   };
-  
 
   return (
     <div className="profile-container">

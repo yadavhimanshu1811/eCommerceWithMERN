@@ -47,6 +47,11 @@ const Updateproduct = () => {
   }, []);
 
   const handleUpdateProduct = async () => {
+    const { name, price, category, company } = productdetails;
+    if (!name || !price || !category || !company) {
+      alert("Please add correct details");
+      return false;
+    }
     const response = await fetch(`http://localhost:3000/updateproduct/${id}`, {
       method: "put",
       body: JSON.stringify(productdetails),
