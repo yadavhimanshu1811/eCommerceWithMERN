@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import eCart from "../../assets/eCart.jpg";
 

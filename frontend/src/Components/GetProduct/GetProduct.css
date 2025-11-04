@@ -1,7 +1,7 @@
 .product-container {
   display: flex;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 20px;
   font-family: "Inter", sans-serif;
 }
 
