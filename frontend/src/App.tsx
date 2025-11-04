@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AddProduct from "./Components/AddProduct/AddProduct";
 import GetProduct from "./Components/GetProduct/GetProduct";
 import Updateproduct from "./Components/Updateproduct/Updateproduct";
+import Profile from "./Components/Profile/Profile";
 
 function App() {
   const router = createBrowserRouter([
@@ -59,20 +60,13 @@ function App() {
             </>
           ),
         },
-        // {
-        //   path: "/logout",
-        //   element: (
-        //     <>
-        //       <Navbar />
-        //     </>
-        //   ),
-        // },
         {
-          path: "/profile ",
+          path: "/profile",
           element: (
-            <div>
+            <>
               <Navbar />
-            </div>
+              <Profile/>
+            </>
           ),
         },
       ],
