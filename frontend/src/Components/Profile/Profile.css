@@ -17,3 +17,17 @@
     box-shadow: 0 0 30px rgb(104, 101, 101);
     border-radius: 10px;
 }
+
+.user-detail{
+    display: flex;
+    align-items: center;
+    margin: 1px;
+}
+
+.user-detail span{
+    margin: 0;
+    width: 100px;
+}
+.user-detail input{
+    margin: 0
+}

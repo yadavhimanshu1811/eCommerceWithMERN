@@ -119,6 +119,24 @@ app.get("/search/:key",verifyToken, async(req, resp)=>{
     resp.send(result);
 })
 
+//Update user details API
+app.put("/updateuser/:id", verifyToken, async(req, resp)=>{
+    try{
+        const result = await User.updateOne(
+            {_id: req.params.id},
+            {$set: req.body}
+        )
+
+        if(result.matchedCount == 0){
+            return resp.status(404).send({ error: "No user found with this ID" });
+        }
+        resp.send(result);
+    }catch(err){
+        console.error("Error updating user details:", err);
+        resp.status(500).send({ error: "Internal Server Error" });
+    }
+})
+
 function verifyToken(req, resp, next){ //middleware
     let token = req.headers["authorization"];
     if(token){
