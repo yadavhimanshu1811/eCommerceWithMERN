@@ -34,12 +34,11 @@ const GetProduct = () => {
     getProducts();
   }, []);
 
-  let debounceTimer:ReturnType<typeof setTimeout>;  //TODO revise
-  
+  let debounceTimer: ReturnType<typeof setTimeout>; //TODO revise
 
   const handleSearch = (searchString: string) => {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(async() => {
+    debounceTimer = setTimeout(async () => {
       if (searchString.trim()) {
         const response = await fetch(
           `http://localhost:3000/search/${searchString}`
@@ -56,7 +55,7 @@ const GetProduct = () => {
 
   return (
     <div className="product-container">
-      <div>
+      <div className="product-container-div">
         <h1>Products List</h1>
         <input
           placeholder="Search product"
@@ -83,10 +82,12 @@ const GetProduct = () => {
                 <div className="cell">{item.company}</div>
                 <div className="cell">{item.category}</div>
                 <div className="cell">
-                  <button onClick={() => deleteProduct(item._id)}>
+                  <button className="delete-btn" onClick={() => deleteProduct(item._id)}>
                     Delete
                   </button>
-                  <Link to={`/update/${item._id}`}>Update</Link>
+                  <Link to={`/update/${item._id}`}>
+                    <button>Update</button>
+                  </Link>
                 </div>
               </div>
             );

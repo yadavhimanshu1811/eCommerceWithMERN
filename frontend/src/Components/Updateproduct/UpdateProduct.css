@@ -1,0 +1,31 @@
+.update-product-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.update-product-div{
+    width:50%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.product-detail{
+    display: flex;
+    align-items: center;
+    margin: 1px 
+}
+
+.product-detail span{
+    margin: 0;
+    width: 100px;
+}
+.product-detail input{
+    margin: 0
+}

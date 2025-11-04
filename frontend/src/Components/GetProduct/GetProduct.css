@@ -1,32 +1,119 @@
-.product-container{
-    width: 100%;
-    display: flex;
-    justify-content: center;
+.product-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  font-family: "Inter", sans-serif;
 }
 
-.row{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid rgb(232, 221, 221);
-}
-.cell-header{
-    border: 1px solid black;
-    width: 150px;
-    padding: 5px;
-    display: flex;
-    justify-content: center;
+.product-container-div {
+  width: 80%;
+  max-width: 900px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  box-sizing: border-box; /* ensures padding stays within width */
+  overflow: hidden; /* prevents any overflow */
 }
 
-.cell{
-    border: 1px solid rgb(185, 182, 182);
-    width: 150px;
-    padding: 5px;
-    display: flex;
-    justify-content: center;
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
 }
 
-a {
-  text-decoration: none;
-  color: black;
+input {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box; /* ✅ prevents overflow */
+}
+
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Table-like grid layout */
+.row {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr 1fr 1fr 160px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cell-header {
+  font-weight: 600;
+  background-color: #f8f9fa;
+  padding: 10px 0;
+  border-bottom: 2px solid #dee2e6;
+  text-transform: capitalize;
+} 
+
+.cell {
+  color: #555;
+  padding: 6px 5px;
+  flex: 1;
+  word-break: break-all;        /* 💥 forces break anywhere if word too long */
+  white-space: normal;          /* allow wrapping */
+  overflow-wrap: anywhere;      /* modern way to allow breaking */
+  box-sizing: border-box;
+}
+
+/* Buttons */
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin: 0 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+button.delete-btn {
+  background-color: #dc3545; /* red for delete */
+}
+
+button.delete-btn:hover {
+  background-color: #a71d2a;
+}
+
+
+/* No products message */
+h1 + h1 {
+  text-align: center;
+  color: #777;
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 700px) {
+  .row {
+    grid-template-columns: 40px 1fr 1fr;
+    grid-row-gap: 8px;
+  }
+
+  .cell-header:nth-child(n + 4),
+  .cell:nth-child(n + 4) {
+    display: none;
+  }
+
+  button {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 interface LoginSuccess {
   name: string;
@@ -26,7 +27,7 @@ const Login = () => {
   });
 
   const handleLogin = async () => {
-    const {email, password } = loginDetails;
+    const { email, password } = loginDetails;
     if (!email || !password) {
       alert("Please enter appropriate entries");
     } else {
@@ -49,32 +50,35 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <input
-        value={loginDetails.email}
-        onChange={(e) => {
-          setLoginDetails({
-            ...loginDetails,
-            email: e.target.value,
-          });
-        }}
-        type="text"
-        placeholder="Enter Email"
-        className="input-box"
-      />
-      <input
-        value={loginDetails.password}
-        onChange={(e) => {
-          setLoginDetails({
-            ...loginDetails,
-            password: e.target.value,
-          });
-        }}
-        type="password"
-        placeholder="Enter Password"
-        className="input-box"
-      />
-      <button onClick={handleLogin}>Login</button>
+    <div className="login-container">
+      <div className="login-div">
+        <h1>Login</h1>
+        <input
+          value={loginDetails.email}
+          onChange={(e) => {
+            setLoginDetails({
+              ...loginDetails,
+              email: e.target.value,
+            });
+          }}
+          type="text"
+          placeholder="Enter Email"
+          className="input-box"
+        />
+        <input
+          value={loginDetails.password}
+          onChange={(e) => {
+            setLoginDetails({
+              ...loginDetails,
+              password: e.target.value,
+            });
+          }}
+          type="password"
+          placeholder="Enter Password"
+          className="input-box"
+        />
+        <button onClick={handleLogin}>Login</button>
+      </div>
     </div>
   );
 };

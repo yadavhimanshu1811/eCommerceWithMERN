@@ -39,42 +39,44 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      <h1>Sign up</h1>
-      <input
-        className="input-box"
-        placeholder="Enter Name"
-        value={userDetails.name}
-        onChange={(e) =>
-          setUserDetails({
-            ...userDetails,
-            name: e.target.value,
-          })
-        }
-      />
-      <input
-        className="input-box"
-        placeholder="Enter Email"
-        value={userDetails.email}
-        onChange={(e) =>
-          setUserDetails({
-            ...userDetails,
-            email: e.target.value,
-          })
-        }
-      />
-      <input
-        className="input-box"
-        placeholder="Enter Password"
-        value={userDetails.password}
-        onChange={(e) =>
-          setUserDetails({
-            ...userDetails,
-            password: e.target.value,
-          })
-        }
-      />
-      <button onClick={submitdetails}>Sign up</button>
+    <div className="signup-container">
+      <div className="signup-div">
+        <h1>Sign up</h1>
+        <input
+          className="input-box"
+          placeholder="Enter Name"
+          value={userDetails.name}
+          onChange={(e) =>
+            setUserDetails({
+              ...userDetails,
+              name: e.target.value,
+            })
+          }
+        />
+        <input
+          className="input-box"
+          placeholder="Enter Email"
+          value={userDetails.email}
+          onChange={(e) =>
+            setUserDetails({
+              ...userDetails,
+              email: e.target.value,
+            })
+          }
+        />
+        <input
+          className="input-box"
+          placeholder="Enter Password"
+          value={userDetails.password}
+          onChange={(e) =>
+            setUserDetails({
+              ...userDetails,
+              password: e.target.value,
+            })
+          }
+        />
+        <button onClick={submitdetails}>Sign up</button>
+      </div>
     </div>
   );
 };

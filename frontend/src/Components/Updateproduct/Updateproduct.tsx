@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams , useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import "./UpdateProduct.css";
 
 const Updateproduct = () => {
   const [loading, setLoading] = useState(true);
@@ -46,19 +47,18 @@ const Updateproduct = () => {
       method: "put",
       body: JSON.stringify(productdetails),
       headers: {
-          "Content-Type": "application/json",
-        },
+        "Content-Type": "application/json",
+      },
     });
     const result = await response.json();
     console.log("product updated", result);
-    navigate("/")
-
+    navigate("/");
   };
 
   const showUpdateForm = () => {
     return (
-      <div>
-        <div>
+      <>
+        <div className="product-detail">
           <span>Name:</span>
           <input
             placeholder="Enter name"
@@ -71,7 +71,7 @@ const Updateproduct = () => {
             }}
           />
         </div>
-        <div>
+        <div className="product-detail">
           <span>Price:</span>
           <input
             placeholder="Enter price"
@@ -84,7 +84,7 @@ const Updateproduct = () => {
             }}
           />
         </div>
-        <div>
+        <div className="product-detail">
           <span>Category:</span>
           <input
             placeholder="Enter category"
@@ -97,7 +97,7 @@ const Updateproduct = () => {
             }}
           />
         </div>
-        <div>
+        <div className="product-detail">
           <span>Company:</span>
           <input
             placeholder="Enter company"
@@ -111,14 +111,16 @@ const Updateproduct = () => {
           />
         </div>
         <button onClick={handleUpdateProduct}>Update</button>
-      </div>
+      </>
     );
   };
   return (
-    <div>
-      <h1>Update Product</h1>
-      {error ? <div>{error}</div> : null}
-      {loading ? <div>Loading......</div> : showUpdateForm()}
+    <div className="update-product-container">
+      <div className="update-product-div">
+        <h1>Update Product</h1>
+        {error ? <div>{error}</div> : null}
+        {loading ? <div>Loading......</div> : showUpdateForm()}
+      </div>
     </div>
   );
 };

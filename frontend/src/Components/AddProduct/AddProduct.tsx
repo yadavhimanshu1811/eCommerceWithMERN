@@ -36,7 +36,8 @@ export const AddProduct = () => {
 
   return (
     <div className="add-product-container">
-      <div>
+      <div className="add-product-div">
+        <h1>Add Product</h1>
         <input
           className="input-box"
           placeholder="Enter Name"
