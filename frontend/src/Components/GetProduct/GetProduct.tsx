@@ -21,8 +21,12 @@ const GetProduct = () => {
       },
     });
     const result = await response.json();
-    console.log("get product", result);
-    setProducts(result);
+    if ("error" in result) {
+      alert(result.error);
+    } else {
+      console.log("get product", result);
+      setProducts(result);
+    }
   };
 
   const deleteProduct = async (id: string) => {

@@ -20,11 +20,13 @@ export const AddProduct = () => {
         body: JSON.stringify({ ...productDetails, userID }),
         headers: {
           "Content-Type": "application/json",
-          "authorization": JSON.parse(localStorage.getItem("token") || "")
+          authorization: JSON.parse(localStorage.getItem("token") || ""),
         },
       });
       const result = await response.json();
-      if (result) {
+      if ("error" in result) {
+        alert(result.error);
+      } else {
         setProductDetails({
           name: "",
           price: "",

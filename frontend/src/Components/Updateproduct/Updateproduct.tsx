@@ -16,19 +16,19 @@ const Updateproduct = () => {
 
   const getProductDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/getproduct/${id}`,{
-        headers:{
-          authorization: JSON.parse(localStorage.getItem("token") || "")
-        }
+      const response = await fetch(`http://localhost:3000/getproduct/${id}`, {
+        headers: {
+          authorization: JSON.parse(localStorage.getItem("token") || ""),
+        },
       });
-      const data = await response.json();
+      const result = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch product");
+      if ("error" in result) {
+        alert(result.error);
+        setError(result.error);
+      } else {
+        setProductDetails(result);
       }
-      console.log("result", data);
-
-      setProductDetails(data);
       setLoading(false);
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -52,12 +52,15 @@ const Updateproduct = () => {
       body: JSON.stringify(productdetails),
       headers: {
         "Content-Type": "application/json",
-        authorization: JSON.parse(localStorage.getItem("token") || "")
+        authorization: JSON.parse(localStorage.getItem("token") || ""),
       },
     });
     const result = await response.json();
-    console.log("product updated", result);
-    navigate("/");
+    if ("error" in result) {
+      alert(result.error);
+    } else {
+      navigate("/");
+    }
   };
 
   const showUpdateForm = () => {

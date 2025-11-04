@@ -13,13 +13,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-//sigmnupAPI
+//signupAPI
 app.post("/register", async (req, resp)=>{
     let user = new User(req.body);
     let result = await user.save();
     result = result.toObject();
     delete result.password //TODO 
-    Jwt.sign({result},jwtKey,{expiresIn:"2h"}, (err, token)=>{
+    Jwt.sign({result},jwtKey,{expiresIn:"1h"}, (err, token)=>{
         if(err){
             resp.send({error: "Something went wrong"});
         }
@@ -36,7 +36,7 @@ app.post("/login", async (req, resp)=>{
     if(req.body.email && req.body.password){
         let user = await User.findOne(req.body).select("-password");
         if(user){
-            Jwt.sign({user},jwtKey,{expiresIn:"2h"}, (err, token)=>{
+            Jwt.sign({user},jwtKey,{expiresIn:"1h"}, (err, token)=>{
                 if(err){
                     resp.send({error: "Something went wrong"});
                 }
@@ -125,7 +125,7 @@ function verifyToken(req, resp, next){ //middleware
         // token.split(' ')     if token contains "bearer" at start
         Jwt.verify(token, jwtKey, (err, valid)=>{
             if(err){
-                resp.status(401).send({error: "Invalid authorization"})
+                resp.status(401).send({error: "Invalid authorization ! Please login again"})
             }else{
                 next();
             }
