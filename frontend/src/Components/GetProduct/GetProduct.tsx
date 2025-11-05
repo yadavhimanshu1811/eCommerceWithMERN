@@ -73,7 +73,7 @@ const GetProduct = () => {
   return (
     <div className="product-container">
       <div className="product-container-div">
-        <h1>Products List</h1>
+        <h1>Products List {`(${products.length} items)`}</h1>
         <input
           placeholder="Search product"
           onChange={(e) => handleSearch(e.target.value)}

@@ -12,11 +12,12 @@
   box-shadow: 0 0 30px rgb(104, 101, 101);
   border-radius: 15px;
   padding: 10px;
-  box-sizing: border-box; /* ensures padding stays within width */
+  box-sizing: border-box;
 }
-.product-list{
+
+.product-list {
   max-height: 225px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 h1 {
@@ -34,7 +35,7 @@ input {
   border: 1px solid #ccc;
   border-radius: 8px;
   transition: border-color 0.3s ease;
-  box-sizing: border-box; /* ✅ prevents overflow */
+  box-sizing: border-box;
 }
 
 input:focus {
@@ -42,7 +43,7 @@ input:focus {
   outline: none;
 }
 
-/* Table-like grid layout */
+/* Desktop layout */
 .row {
   display: grid;
   grid-template-columns: 60px 1fr 1fr 1fr 1fr 160px;
@@ -57,16 +58,14 @@ input:focus {
   padding: 10px 0;
   border-bottom: 2px solid #dee2e6;
   text-transform: capitalize;
-} 
+}
 
 .cell {
   color: #555;
   padding: 6px 5px;
-  flex: 1;
-  word-break: break-all;        /* 💥 forces break anywhere if word too long */
-  white-space: normal;          /* allow wrapping */
-  overflow-wrap: anywhere;      /* modern way to allow breaking */
-  box-sizing: border-box;
+  word-break: break-word;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 /* Buttons */
@@ -76,7 +75,7 @@ button {
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
-  margin: 0 4px;
+  margin: 4px 2px;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
@@ -87,15 +86,13 @@ button:hover {
 }
 
 button.delete-btn {
-  background-color: #dc3545; /* red for delete */
+  background-color: #dc3545;
 }
 
 button.delete-btn:hover {
   background-color: #a71d2a;
 }
 
-
-/* No products message */
 h1 + h1 {
   text-align: center;
   color: #777;
@@ -103,20 +100,61 @@ h1 + h1 {
   margin-top: 20px;
 }
 
-/* Responsive design */
+/* ✅ Responsive: compact layout for mobile */
 @media (max-width: 700px) {
-  .row {
-    grid-template-columns: 40px 1fr 1fr;
-    grid-row-gap: 8px;
+  .product-container-div {
+    width: 95%;
+    padding: 10px;
   }
-
-  .cell-header:nth-child(n + 4),
-  .cell:nth-child(n + 4) {
+  /* completely remove header row on small screens */
+  .product-container-div > .row:first-of-type {
     display: none;
   }
 
+  .row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fafafa;
+  }
+
+  .cell-header {
+    display: none; /* hide table headers */
+  }
+
+  .cell {
+    display: block;                /* stack label + value */
+    width: 100%;
+    padding: 3px 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .cell::before {
+    font-weight: 600;
+    color: #333;
+    margin-right: 5px;
+    content: attr(data-label);     /* dynamically added labels */
+  }
+
+  /* hide the old nth-child labels */
+  .cell:nth-child(1)::before { content: "S.No: "; }
+  .cell:nth-child(2)::before { content: "Name: "; }
+  .cell:nth-child(3)::before { content: "Price: "; }
+  .cell:nth-child(4)::before { content: "Company: "; }
+  .cell:nth-child(5)::before { content: "Category: "; }
+  .cell:nth-child(6)::before { content: "Actions: "; }
+
+  .cell button {
+    margin-top: 5px;
+  }
+
   button {
-    padding: 5px 10px;
     font-size: 0.9rem;
+    padding: 5px 10px;
   }
 }
