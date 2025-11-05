@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./Addproduct.css";
 
 export const AddProduct = () => {
@@ -9,10 +9,32 @@ export const AddProduct = () => {
     company: "",
   });
 
+  
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const priceRef = useRef<HTMLInputElement | null>(null);
+  const companyRef = useRef<HTMLInputElement | null>(null);
+  const categoryRef = useRef<HTMLInputElement | null>(null);
+  const submitRef = useRef<HTMLButtonElement | null>(null);
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    nextRef?: React.RefObject<HTMLInputElement | HTMLButtonElement | null>
+  ) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      nextRef?.current?.focus();
+    }
+  };
+
+  useEffect(()=>{
+    nameRef && nameRef.current && nameRef.current.focus()
+  },[])
+
   const handleAddProduct = async () => {
     const { name, price, category, company } = productDetails;
     if (!name || !price || !category || !company) {
       alert("Please add correct details");
+      nameRef && nameRef.current && nameRef.current.focus()
     } else {
       const userID = JSON.parse(localStorage.getItem("user") ?? "{}")?._id;
       const response = await fetch("http://localhost:3000/addproduct", {
@@ -45,6 +67,8 @@ export const AddProduct = () => {
           className="input-box"
           placeholder="Enter Name"
           value={productDetails.name}
+          ref={nameRef}
+          onKeyDown={(e) => handleKeyDown(e, priceRef)}
           onChange={(e) => {
             setProductDetails({
               ...productDetails,
@@ -56,6 +80,8 @@ export const AddProduct = () => {
           className="input-box"
           placeholder="Enter price"
           value={productDetails.price}
+          ref={priceRef}
+          onKeyDown={(e) => handleKeyDown(e, categoryRef)}
           onChange={(e) => {
             setProductDetails({
               ...productDetails,
@@ -67,6 +93,8 @@ export const AddProduct = () => {
           className="input-box"
           placeholder="Enter category"
           value={productDetails.category}
+          ref={categoryRef}
+          onKeyDown={(e) => handleKeyDown(e, companyRef)}
           onChange={(e) => {
             setProductDetails({
               ...productDetails,
@@ -78,6 +106,8 @@ export const AddProduct = () => {
           className="input-box"
           placeholder="Enter company"
           value={productDetails.company}
+          ref={companyRef}
+          onKeyDown={(e) => handleKeyDown(e, submitRef)}
           onChange={(e) => {
             setProductDetails({
               ...productDetails,
@@ -85,7 +115,7 @@ export const AddProduct = () => {
             });
           }}
         />
-        <button onClick={handleAddProduct}>Add Product</button>
+        <button ref={submitRef} onClick={handleAddProduct}>Add Product</button>
       </div>
     </div>
   );
