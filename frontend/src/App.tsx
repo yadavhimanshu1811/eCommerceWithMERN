@@ -17,7 +17,9 @@ function App() {
       element: (
         <>
           <Navbar />
-          <Signup />
+          <div className="content">
+            <Signup />
+          </div>
         </>
       ),
     },
@@ -26,7 +28,9 @@ function App() {
       element: (
         <>
           <Navbar />
-          <Login />
+          <div className="content">
+            <Login />
+          </div>
         </>
       ),
     },
@@ -38,7 +42,9 @@ function App() {
           element: (
             <>
               <Navbar />
-              <GetProduct/>
+              <div className="content">
+                <GetProduct />
+              </div>
             </>
           ),
         },
@@ -47,7 +53,9 @@ function App() {
           element: (
             <>
               <Navbar />
-              <AddProduct/>
+              <div className="content">
+                <AddProduct />
+              </div>
             </>
           ),
         },
@@ -56,7 +64,9 @@ function App() {
           element: (
             <>
               <Navbar />
-              <Updateproduct/>
+              <div className="content">
+                <Updateproduct />
+              </div>
             </>
           ),
         },
@@ -65,7 +75,9 @@ function App() {
           element: (
             <>
               <Navbar />
-              <Profile/>
+              <div className="content">
+                <Profile />
+              </div>
             </>
           ),
         },
