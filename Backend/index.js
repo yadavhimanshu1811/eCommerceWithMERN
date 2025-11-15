@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://e-commerce-with-mern-8twte741h.vercel.app"
+    "https://e-commerce-with-mern-kappa.vercel.app"
   ],
   credentials: true
 }));
