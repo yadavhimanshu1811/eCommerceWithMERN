@@ -15,7 +15,8 @@ const GetProduct = () => {
 
   const getProducts = async () => {
     //TODO add pagination later
-    const response = await fetch("http://localhost:3000/getproducts", {
+    const API = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${API}/getproducts`, {
       headers: {
         authorization: JSON.parse(localStorage.getItem("token") || ""),
       },
@@ -30,7 +31,8 @@ const GetProduct = () => {
   };
 
   const deleteProduct = async (id: string) => {
-    const response = await fetch(`http://localhost:3000/deleteproduct/${id}`, {
+    const API = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${API}/deleteproduct/${id}`, {
       method: "delete",
       headers: {
         authorization: JSON.parse(localStorage.getItem("token") || ""),
@@ -52,14 +54,12 @@ const GetProduct = () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(async () => {
       if (searchString.trim()) {
-        const response = await fetch(
-          `http://localhost:3000/search/${searchString}`,
-          {
-            headers: {
-              authorization: JSON.parse(localStorage.getItem("token") || ""),
-            },
-          }
-        );
+        const API = import.meta.env.VITE_API_URL;
+        const response = await fetch(`${API}/search/${searchString}`, {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem("token") || ""),
+          },
+        });
         const result = await response.json();
         if (result) {
           setProducts(result);

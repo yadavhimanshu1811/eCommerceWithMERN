@@ -16,7 +16,8 @@ const Updateproduct = () => {
 
   const getProductDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/getproduct/${id}`, {
+      const API = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API}/getproduct/${id}`, {
         headers: {
           authorization: JSON.parse(localStorage.getItem("token") || ""),
         },
@@ -52,7 +53,8 @@ const Updateproduct = () => {
       alert("Please add correct details");
       return false;
     }
-    const response = await fetch(`http://localhost:3000/updateproduct/${id}`, {
+    const API = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${API}/updateproduct/${id}`, {
       method: "put",
       body: JSON.stringify(productdetails),
       headers: {

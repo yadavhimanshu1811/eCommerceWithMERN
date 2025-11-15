@@ -37,7 +37,8 @@ export const AddProduct = () => {
       nameRef && nameRef.current && nameRef.current.focus()
     } else {
       const userID = JSON.parse(localStorage.getItem("user") ?? "{}")?._id;
-      const response = await fetch("http://localhost:3000/addproduct", {
+      const API = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API}/addproduct`, {
         method: "post",
         body: JSON.stringify({ ...productDetails, userID }),
         headers: {

@@ -30,7 +30,8 @@ const Login = () => {
     if (!email || !password) {
       alert("Please enter appropriate entries");
     } else {
-      const response = await fetch("http://localhost:3000/login", {
+      const API = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API}/login`, {
         method: "post",
         body: JSON.stringify(loginDetails),
         headers: {

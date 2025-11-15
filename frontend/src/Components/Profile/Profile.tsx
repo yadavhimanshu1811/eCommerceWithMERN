@@ -27,8 +27,8 @@ const Profile = () => {
       alert("Please add correct details");
       return false;
     }
-    const response = await fetch(
-      `http://localhost:3000/updateuser/${userDetail._id}`,
+    const API = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API}/updateuser/${userDetail._id}`,
       {
         method: "put",
         body: JSON.stringify(userDetail),

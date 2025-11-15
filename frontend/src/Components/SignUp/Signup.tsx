@@ -34,7 +34,8 @@ const Signup = () => {
     if (!name || !email || !password) {
       alert("Please enter appropriate entries"); //TODO handle error for each input
     } else {
-      const response = await fetch("http://localhost:3000/register", {
+      const API = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API}/register`, {
         method: "post",
         body: JSON.stringify(userDetails),
         headers: {
