@@ -61,6 +61,24 @@ app.post("/login", async (req, resp) => {
   }
 });
 
+//Update user details API
+app.put("/updateuser/:id", verifyToken, async(req, resp)=>{
+    try{
+        const result = await User.updateOne(
+            {_id: req.params.id},
+            {$set: req.body}
+        )
+
+        if(result.matchedCount == 0){
+            return resp.status(404).send({ error: "No user found with this ID" });
+        }
+        resp.send(result);
+    }catch(err){
+        console.error("Error updating user details:", err);
+        resp.status(500).send({ error: "Internal Server Error" });
+    }
+})
+
 // =============================
 //      VERIFY TOKEN MIDDLEWARE
 // =============================
