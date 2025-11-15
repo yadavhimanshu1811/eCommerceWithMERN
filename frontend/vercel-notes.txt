@@ -1,0 +1,7 @@
+
+// What the file vercel.json does
+// 	•	Tells Vercel: “If someone opens /signup, /login, /anything, return index.html”
+// 	•	React Router will take over and load the correct page
+
+// This is EXACTLY how SPAs (Single-Page Applications) must be deployed.
+
