@@ -1,19 +1,21 @@
 require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
+const express = require("express"); //Backend framework
+const cors = require("cors");  //allows frontend (React) to talk to backend
 const mongoose = require("mongoose");
 const Jwt = require("jsonwebtoken");
 
 const jwtKey = process.env.JWT_SECRET;
 
-// DB connection
-require("./db/config");
-const User = require("./db/User");
-const Product = require("./db/Product");
-const app = express();
+require("./db/config"); // DB connection
 
+ //Importing Mongoose Models: These define shapes (schema) of User and Product documents in MongoDB.
+const User = require("./db/User"); 
+const Product = require("./db/Product");
+
+const app = express();  //Initializing Express App
 app.use(express.json());
 
+// Allows your React frontend to make API requests. Without this → CORS error.
 app.use(cors({
   origin: [
     "http://localhost:5173",
@@ -142,6 +144,7 @@ app.delete("/deleteproduct/:id", verifyToken, async (req, resp) => {
 });
 
 app.get("/search/:key", verifyToken, async (req, resp) => {
+  // $or: OR operator in mongoDB | $options: "i" → case-insensitive | $regex allows partial matching 
   let result = await Product.find({
     "$or": [
       { name: { $regex: req.params.key, $options: "i" } },
