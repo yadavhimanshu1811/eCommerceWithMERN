@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../context/NotificationContext";
 import "./Login.css";
+import Loader from "../Loader/Loader";
 
 interface LoginSuccess {
-  user: { name: string; email: string; id: any },
-  auth: string
+  user: { name: string; email: string; id: any };
+  auth: string;
 }
 
 interface LoginError {
@@ -22,7 +23,7 @@ const Login = () => {
       navigate("/");
     }
   });
-
+  const [loading, setLoading] = useState(false);
   const [loginDetails, setLoginDetails] = useState({
     email: "",
     password: "",
@@ -33,6 +34,7 @@ const Login = () => {
     if (!email || !password) {
       showNotification("Please enter appropriate entries!", "error");
     } else {
+      setLoading(true);
       const API = import.meta.env.VITE_API_URL;
       const response = await fetch(`${API}/login`, {
         method: "post",
@@ -42,6 +44,7 @@ const Login = () => {
         },
       });
       const result: LoginSuccess | LoginError = await response.json();
+      setLoading(false);
       if ("error" in result) {
         showNotification(result.error, "error");
       } else {
@@ -81,7 +84,11 @@ const Login = () => {
           placeholder="Enter Password"
           className="input-box"
         />
-        <button onClick={handleLogin}>Login</button>
+        {loading ? (
+          <Loader size="sm" />
+        ) : (
+          <button onClick={handleLogin}>Login</button>
+        )}
       </div>
     </div>
   );

@@ -9,6 +9,7 @@
 .login-div{
     width: 50%;
     max-width: 500px;
+    height: 200px;
     margin-top: 20px;
     padding: 20px;
     box-shadow: 0 0 30px rgb(104, 101, 101);

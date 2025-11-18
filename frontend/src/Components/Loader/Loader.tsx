@@ -13,13 +13,6 @@ interface LoaderProps {
   size?: LoaderSize;
 }
 
-/**
- * Usage Examples:
- *
- * <Loader fullScreen message="Loading products..." />
- * <Loader size="sm" />
- * <div style={{ height: 300 }}><Loader /></div>
- */
 export default function Loader({
   fullScreen = false,
   message,
