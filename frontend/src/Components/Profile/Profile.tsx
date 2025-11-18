@@ -1,9 +1,10 @@
 import { useState } from "react";
 import "./Profile.css";
 import { useNotification } from "../../context/NotificationContext";
+import Loader from "../Loader/Loader";
 
 const Profile = () => {
-  const {showNotification} = useNotification();
+  const { showNotification } = useNotification();
 
   const getStoredUser = () => {
     try {
@@ -13,13 +14,14 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error parsing user from localStorage:", error);
-      showNotification("Error parsing user from localStorage", "error")
+      showNotification("Error parsing user from localStorage", "error");
     }
     // default (in case of error or missing data)
     return { name: "", email: "" };
   };
 
   const [userDetail, setUserDetail] = useState(getStoredUser());
+  const [loading, setLoading] = useState(false);
 
   //TODO
   //edit user details
@@ -28,9 +30,10 @@ const Profile = () => {
   const handleUpdateUser = async () => {
     const { name, email } = userDetail;
     if (!name || !email) {
-      showNotification("Please add correct details", "error" )
+      showNotification("Please add correct details", "error");
       return false;
     }
+    setLoading(true);
     const API = import.meta.env.VITE_API_URL;
     const response = await fetch(`${API}/updateuser/${userDetail._id}`, {
       method: "put",
@@ -41,10 +44,11 @@ const Profile = () => {
       },
     });
     const result = await response.json();
+    setLoading(false);
     if ("error" in result) {
-      showNotification(result.error,"error")
+      showNotification(result.error, "error");
     } else {
-      showNotification("User updated successfully !","success")
+      showNotification("User updated successfully !", "success");
       localStorage.setItem("user", JSON.stringify(userDetail));
     }
   };
@@ -79,7 +83,7 @@ const Profile = () => {
             }}
           />
         </div>
-        <button onClick={handleUpdateUser}>Edit Details</button>
+        {loading ? <Loader size="sm"/> : <button onClick={handleUpdateUser}>Edit Details</button>}
       </div>
     </div>
   );
