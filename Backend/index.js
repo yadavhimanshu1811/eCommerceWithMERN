@@ -130,12 +130,16 @@ app.get("/getproduct/:id", verifyToken, async (req, resp) => {
 });
 
 app.put("/updateproduct/:id", verifyToken, async (req, resp) => {
-  const result = await Product.updateOne(
-    { _id: req.params.id },
-    { $set: req.body }
-  );
-
-  resp.send(result);
+  try {
+    const result = await Product.updateOne(
+      { _id: req.params.id },
+      { $set: req.body }
+    );
+    resp.send(result);
+  } catch (error) {
+    resp.send({"error": "Something went wrong !"});
+  }
+  
 });
 
 app.delete("/deleteproduct/:id", verifyToken, async (req, resp) => {
