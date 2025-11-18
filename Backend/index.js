@@ -33,7 +33,7 @@ app.post("/register", async (req, resp) => {
   result = result.toObject();
   delete result.password;
 
-  Jwt.sign({ result }, jwtKey, { expiresIn: "1h" }, (err, token) => {
+  Jwt.sign({ result }, jwtKey, { expiresIn: "1y" }, (err, token) => {
     if (err) {
       return resp.send({ error: "Something went wrong" });
     }
@@ -52,7 +52,7 @@ app.post("/login", async (req, resp) => {
   let user = await User.findOne(req.body).select("-password");
 
   if (user) {
-    Jwt.sign({ user }, jwtKey, { expiresIn: "1h" }, (err, token) => {
+    Jwt.sign({ user }, jwtKey, { expiresIn: "1y" }, (err, token) => {
       if (err) {
         return resp.send({ error: "Something went wrong" });
       }
