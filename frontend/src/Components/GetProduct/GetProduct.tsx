@@ -36,6 +36,7 @@ const GetProduct = () => {
   };
 
   const deleteProduct = async (id: string) => {
+    setloading(true);
     const API = import.meta.env.VITE_API_URL;
     const response = await fetch(`${API}/deleteproduct/${id}`, {
       method: "delete",
@@ -46,6 +47,7 @@ const GetProduct = () => {
     const result = await response.json();
     if ("error" in result) {
       showNotification(result.error, "error");
+      setloading(false);
     } else {
       getProducts();
       showNotification("Product deleted successfully", "success");
@@ -59,6 +61,7 @@ const GetProduct = () => {
   let debounceTimer: ReturnType<typeof setTimeout>; //TODO revise
 
   const handleSearch = (searchString: string) => {
+    setloading(true);
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(async () => {
       if (searchString.trim()) {
@@ -71,6 +74,7 @@ const GetProduct = () => {
         const result = await response.json();
         if (result) {
           setProducts(result);
+          setloading(false);
         }
       } else {
         getProducts();
