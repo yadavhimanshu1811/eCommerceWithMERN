@@ -1,12 +1,9 @@
 import { useState } from "react";
 import "./Profile.css";
-import Notification from "../Notification";
+import { useNotification } from "../../context/NotificationContext";
 
 const Profile = () => {
-  const [notif, setNotif] = useState<{
-    message: string;
-    type: "success" | "error" | "info";
-  } | null>(null);
+  const {showNotification} = useNotification();
 
   const getStoredUser = () => {
     try {
@@ -16,6 +13,7 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error parsing user from localStorage:", error);
+      showNotification("Error parsing user from localStorage", "error")
     }
     // default (in case of error or missing data)
     return { name: "", email: "" };
@@ -30,7 +28,7 @@ const Profile = () => {
   const handleUpdateUser = async () => {
     const { name, email } = userDetail;
     if (!name || !email) {
-      setNotif({ message: "Please add correct details", type: "error" })
+      showNotification("Please add correct details", "error" )
       return false;
     }
     const API = import.meta.env.VITE_API_URL;
@@ -44,23 +42,15 @@ const Profile = () => {
     });
     const result = await response.json();
     if ("error" in result) {
-      setNotif({ message: result.error, type: "error" })
+      showNotification(result.error,"error")
     } else {
-      setNotif({ message: "User updated successfully !", type: "success" })
+      showNotification("User updated successfully !","success")
       localStorage.setItem("user", JSON.stringify(userDetail));
     }
   };
 
   return (
     <div className="profile-container">
-      {notif && notif.message ? (
-        <Notification
-          message={notif.message}
-          type={notif.type}
-          duration={2500}
-          onClose={() => setNotif(null)}
-        />
-      ) : null}
       <div className="profile-div">
         <h1>Your details</h1>
         <div className="user-detail">
@@ -93,17 +83,6 @@ const Profile = () => {
       </div>
     </div>
   );
-  //   return (
-  //     <div className='profile-container'>
-  //         <div className='profile-div'>
-  //             <h1>Your details</h1>
-  //             <div className="user-detail"><span>Name :</span><span>{userDetail.name}</span></div>
-  //             <div className="user-detail"><span>Email :</span><span>{userDetail.email}</span></div>
-  //             <button>Edit Details</button>
-
-  //         </div>
-  //     </div>
-  //   )
 };
 
 export default Profile;
