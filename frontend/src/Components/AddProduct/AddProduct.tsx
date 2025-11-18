@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "./Addproduct.css";
-import Notification from "../Notification";
+import { useNotification } from "../../context/NotificationContext";
 
 interface ProductDetails {
   name: string;
@@ -9,20 +9,15 @@ interface ProductDetails {
   company: string;
 }
 
-type NotifType = "success" | "error" | "info";
-
 export const AddProduct = () => {
+
+  const { showNotification } = useNotification();
   const [productDetails, setProductDetails] = useState<ProductDetails>({
     name: "",
     price: "",
     category: "",
     company: "",
   });
-
-  const [notif, setNotif] = useState<{
-    message: string;
-    type: NotifType;
-  } | null>(null);
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const priceRef = useRef<HTMLInputElement | null>(null);
@@ -48,7 +43,7 @@ export const AddProduct = () => {
     const { name, price, category, company } = productDetails;
 
     if (!name || !price || !category || !company) {
-      setNotif({ message: "Please add correct details", type: "error" });
+      showNotification("Please add correct details", "error");
       nameRef.current?.focus();
       return;
     }
@@ -66,12 +61,9 @@ export const AddProduct = () => {
       });
       const result = await response.json();
       if ("error" in result) {
-        setNotif({ message: result.error, type: "error" });
+        showNotification(result.error, "error");
       } else {
-        setNotif({
-          message: "Product added successfully!",
-          type: "success",
-        });
+        showNotification("Product added successfully!", "success");
 
         setProductDetails({
           name: "",
@@ -83,10 +75,7 @@ export const AddProduct = () => {
         nameRef.current?.focus();
       }
     } catch (err) {
-      setNotif({
-        message: "Something went wrong!",
-        type: "error",
-      });
+      showNotification("Something went wrong!", "error");
     }
   };
 
@@ -94,15 +83,6 @@ export const AddProduct = () => {
     <>
       <div className="add-product-container">
         <div className="inner-div">
-          {notif && (
-            <Notification
-              message={notif.message}
-              type={notif.type}
-              duration={2500}
-              onClose={() => setNotif(null)}
-            />
-          )}
-
           <div className="add-product-div">
             <h1>Add Product</h1>
 
