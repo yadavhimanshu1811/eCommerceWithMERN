@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./GetProduct.css";
 import { Link } from "react-router-dom";
+import { useNotification } from "../../context/NotificationContext";
 
 interface Product {
   name: string;
@@ -11,6 +12,7 @@ interface Product {
 }
 
 const GetProduct = () => {
+  const {showNotification} = useNotification();
   const [products, setProducts] = useState([]);
 
   const getProducts = async () => {
@@ -40,6 +42,7 @@ const GetProduct = () => {
     });
     const result = await response.json();
     if (result) {
+      showNotification("Product deleted successfully", "success")
       getProducts();
     }
   };
