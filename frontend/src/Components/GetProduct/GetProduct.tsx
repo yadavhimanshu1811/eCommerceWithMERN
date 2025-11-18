@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./GetProduct.css";
 import { Link } from "react-router-dom";
 import { useNotification } from "../../context/NotificationContext";
+import Loader from "../Loader/Loader";
 
 interface Product {
   name: string;
@@ -12,8 +13,9 @@ interface Product {
 }
 
 const GetProduct = () => {
-  const {showNotification} = useNotification();
+  const { showNotification } = useNotification();
   const [products, setProducts] = useState([]);
+  const [loading, setloading] = useState(true);
 
   const getProducts = async () => {
     //TODO add pagination later
@@ -30,6 +32,7 @@ const GetProduct = () => {
       console.log("get product", result);
       setProducts(result);
     }
+    setloading(false);
   };
 
   const deleteProduct = async (id: string) => {
@@ -41,11 +44,11 @@ const GetProduct = () => {
       },
     });
     const result = await response.json();
-    if ("error" in result){
-      showNotification(result.error, "error")
+    if ("error" in result) {
+      showNotification(result.error, "error");
     } else {
-      showNotification("Product deleted successfully", "success")
       getProducts();
+      showNotification("Product deleted successfully", "success");
     }
   };
 
@@ -78,7 +81,7 @@ const GetProduct = () => {
   return (
     <div className="product-container">
       <div className="product-container-div">
-        <h1>Products List {`(${products.length} items)`}</h1>
+        <h1>Products List {loading ? "" : `(${products.length} items)`}</h1>
         <input
           placeholder="Search product"
           onChange={(e) => handleSearch(e.target.value)}
@@ -94,7 +97,11 @@ const GetProduct = () => {
           <div className="cell-header">Actions</div>
         </div>
 
-        {products.length ? (
+        {loading ? (
+          <div className="loader-parent">
+            <Loader />
+          </div>
+        ) : products.length ? (
           <div className="product-list">
             {products.map((item: Product, index: number) => {
               return (
