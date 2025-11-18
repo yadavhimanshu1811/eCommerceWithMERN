@@ -1,7 +1,13 @@
 import { useState } from "react";
 import "./Profile.css";
+import Notification from "../Notification";
 
 const Profile = () => {
+  const [notif, setNotif] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
+
   const getStoredUser = () => {
     try {
       const stored = localStorage.getItem("user");
@@ -24,32 +30,37 @@ const Profile = () => {
   const handleUpdateUser = async () => {
     const { name, email } = userDetail;
     if (!name || !email) {
-      alert("Please add correct details");
+      setNotif({ message: "Please add correct details", type: "error" })
       return false;
     }
     const API = import.meta.env.VITE_API_URL;
-      const response = await fetch(`${API}/updateuser/${userDetail._id}`,
-      {
-        method: "put",
-        body: JSON.stringify(userDetail),
-        headers: {
-          "Content-Type": "application/json",
-          authorization: JSON.parse(localStorage.getItem("token") || ""),
-        },
-      }
-    );
+    const response = await fetch(`${API}/updateuser/${userDetail._id}`, {
+      method: "put",
+      body: JSON.stringify(userDetail),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: JSON.parse(localStorage.getItem("token") || ""),
+      },
+    });
     const result = await response.json();
-    // console.log("result", result);
     if ("error" in result) {
-      alert(result.error);
+      setNotif({ message: result.error, type: "error" })
     } else {
+      setNotif({ message: "User updated successfully !", type: "success" })
       localStorage.setItem("user", JSON.stringify(userDetail));
-      //   navigate("/");
     }
   };
 
   return (
     <div className="profile-container">
+      {notif && notif.message ? (
+        <Notification
+          message={notif.message}
+          type={notif.type}
+          duration={2500}
+          onClose={() => setNotif(null)}
+        />
+      ) : null}
       <div className="profile-div">
         <h1>Your details</h1>
         <div className="user-detail">

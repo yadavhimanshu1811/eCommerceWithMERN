@@ -1,3 +1,52 @@
+/* Container */
+.notification-container {
+  position: fixed;
+  top: 16px;               /* Same as top-4 */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 20px;      /* px-5 py-3 */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideDown 0.35s ease-out;
+  pointer-events: none; /* Prevent layout shifting */
+}
+
+/* Content */
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+/* Notification Types */
+.success {
+  background-color: #16a34a; /* green-600 */
+  color: white;
+}
+
+.error {
+  background-color: #dc2626; /* red-600 */
+  color: white;
+}
+
+.info {
+  background-color: #2563eb; /* blue-600 */
+  color: white;
+}
+
+/* Close button */
+.close-btn {
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Animation */
 @keyframes slideDown {
   0% {
     opacity: 0;
@@ -7,8 +56,4 @@
     opacity: 1;
     transform: translate(-50%, 0);
   }
-}
-
-.animate-slideDown {
-  animation: slideDown 0.35s ease-out;
 }
