@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./UpdateProduct.css";
 import { useNotification } from "../../context/NotificationContext";
+import Loader from "../Loader/Loader";
 
 const Updateproduct = () => {
   const {showNotification} = useNotification()
@@ -133,7 +134,7 @@ const Updateproduct = () => {
     <div className="update-product-container">
       <div className="update-product-div">
         <h1>Update Product</h1>
-        {loading ? <div>Loading......</div> : showUpdateForm()}
+        {loading ? <Loader/> : showUpdateForm()}
       </div>
     </div>
   );
