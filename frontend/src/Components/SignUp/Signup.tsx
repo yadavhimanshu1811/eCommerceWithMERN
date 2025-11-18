@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../context/NotificationContext";
 import "./Signup.css";
+import Loader from "../Loader/Loader";
 
 interface SignupSuccess {
   user: {
@@ -18,6 +19,7 @@ interface SignupFailure {
 const Signup = () => {
   const { showNotification } = useNotification();
 
+  const [loading, setloading] = useState(false);
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
@@ -37,6 +39,7 @@ const Signup = () => {
     if (!name || !email || !password) {
       showNotification("Please enter appropriate entries!", "error");
     } else {
+      setloading(true);
       const API = import.meta.env.VITE_API_URL;
       const response = await fetch(`${API}/register`, {
         method: "post",
@@ -46,7 +49,7 @@ const Signup = () => {
         },
       });
       const result: SignupSuccess | SignupFailure = await response.json();
-
+      setloading(false);
       if ("user" in result) {
         localStorage.setItem("user", JSON.stringify(result.user));
         localStorage.setItem("token", JSON.stringify(result.auth));
@@ -95,7 +98,7 @@ const Signup = () => {
             })
           }
         />
-        <button onClick={submitdetails}>Sign up</button>
+        {loading? <Loader size="sm"/> : <button onClick={submitdetails}>Sign up</button>}
       </div>
     </div>
   );
