@@ -4,15 +4,11 @@
     justify-content: center;
 }
 
-.inner-div{
-    display: flex;
-    flex-direction: column;
-}
-
 .add-product-div{
     /* width:50%; */
     max-width: 500px;
     min-width: 300px;
+    height: 350px;
     margin-top: 20px;
     padding: 10px;
     display: flex;

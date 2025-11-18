@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "./Addproduct.css";
 import { useNotification } from "../../context/NotificationContext";
+import Loader from "../Loader/Loader";
 
 interface ProductDetails {
   name: string;
@@ -10,7 +11,6 @@ interface ProductDetails {
 }
 
 export const AddProduct = () => {
-
   const { showNotification } = useNotification();
   const [productDetails, setProductDetails] = useState<ProductDetails>({
     name: "",
@@ -18,6 +18,7 @@ export const AddProduct = () => {
     category: "",
     company: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const priceRef = useRef<HTMLInputElement | null>(null);
@@ -47,7 +48,7 @@ export const AddProduct = () => {
       nameRef.current?.focus();
       return;
     }
-
+    setLoading(true);
     const userID = JSON.parse(localStorage.getItem("user") ?? "{}")?._id;
     const API = import.meta.env.VITE_API_URL;
     try {
@@ -77,75 +78,79 @@ export const AddProduct = () => {
     } catch (err) {
       showNotification("Something went wrong!", "error");
     }
+    setLoading(false);
   };
 
   return (
     <>
       <div className="add-product-container">
-        <div className="inner-div">
-          <div className="add-product-div">
-            <h1>Add Product</h1>
+        <div className="add-product-div">
+          <h1>Add Product</h1>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <input
+                className="input-box"
+                placeholder="Enter Name"
+                value={productDetails.name}
+                ref={nameRef}
+                onKeyDown={(e) => handleKeyDown(e, priceRef)}
+                onChange={(e) =>
+                  setProductDetails({
+                    ...productDetails,
+                    name: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              className="input-box"
-              placeholder="Enter Name"
-              value={productDetails.name}
-              ref={nameRef}
-              onKeyDown={(e) => handleKeyDown(e, priceRef)}
-              onChange={(e) =>
-                setProductDetails({
-                  ...productDetails,
-                  name: e.target.value,
-                })
-              }
-            />
+              <input
+                className="input-box"
+                placeholder="Enter price"
+                value={productDetails.price}
+                ref={priceRef}
+                onKeyDown={(e) => handleKeyDown(e, categoryRef)}
+                onChange={(e) =>
+                  setProductDetails({
+                    ...productDetails,
+                    price: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              className="input-box"
-              placeholder="Enter price"
-              value={productDetails.price}
-              ref={priceRef}
-              onKeyDown={(e) => handleKeyDown(e, categoryRef)}
-              onChange={(e) =>
-                setProductDetails({
-                  ...productDetails,
-                  price: e.target.value,
-                })
-              }
-            />
+              <input
+                className="input-box"
+                placeholder="Enter category"
+                value={productDetails.category}
+                ref={categoryRef}
+                onKeyDown={(e) => handleKeyDown(e, companyRef)}
+                onChange={(e) =>
+                  setProductDetails({
+                    ...productDetails,
+                    category: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              className="input-box"
-              placeholder="Enter category"
-              value={productDetails.category}
-              ref={categoryRef}
-              onKeyDown={(e) => handleKeyDown(e, companyRef)}
-              onChange={(e) =>
-                setProductDetails({
-                  ...productDetails,
-                  category: e.target.value,
-                })
-              }
-            />
+              <input
+                className="input-box"
+                placeholder="Enter company"
+                value={productDetails.company}
+                ref={companyRef}
+                onKeyDown={(e) => handleKeyDown(e, submitRef)}
+                onChange={(e) =>
+                  setProductDetails({
+                    ...productDetails,
+                    company: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              className="input-box"
-              placeholder="Enter company"
-              value={productDetails.company}
-              ref={companyRef}
-              onKeyDown={(e) => handleKeyDown(e, submitRef)}
-              onChange={(e) =>
-                setProductDetails({
-                  ...productDetails,
-                  company: e.target.value,
-                })
-              }
-            />
-
-            <button ref={submitRef} onClick={handleAddProduct}>
-              Add Product
-            </button>
-          </div>
+              <button ref={submitRef} onClick={handleAddProduct}>
+                Add Product
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>
