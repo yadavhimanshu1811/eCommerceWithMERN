@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useNotification } from "../../context/NotificationContext";
 import "./Login.css";
 
 interface LoginSuccess {
@@ -13,6 +14,8 @@ interface LoginError {
 
 const Login = () => {
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
+  
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("user");
     if (isAuthenticated) {
@@ -28,7 +31,7 @@ const Login = () => {
   const handleLogin = async () => {
     const { email, password } = loginDetails;
     if (!email || !password) {
-      alert("Please enter appropriate entries");
+      showNotification("Please enter appropriate entries!", "error");
     } else {
       const API = import.meta.env.VITE_API_URL;
       const response = await fetch(`${API}/login`, {
@@ -40,8 +43,7 @@ const Login = () => {
       });
       const result: LoginSuccess | LoginError = await response.json();
       if ("error" in result) {
-        alert(result.error);
-        //TODO resolve typescript error
+        showNotification(result.error, "error");
       } else {
         localStorage.setItem("user", JSON.stringify(result.user));
         localStorage.setItem("token", JSON.stringify(result.auth));

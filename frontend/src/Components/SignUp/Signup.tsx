@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useNotification } from "../../context/NotificationContext";
 import "./Signup.css";
 
 interface SignupSuccess {
@@ -15,6 +16,8 @@ interface SignupFailure {
 }
 
 const Signup = () => {
+  const { showNotification } = useNotification();
+
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
@@ -32,7 +35,7 @@ const Signup = () => {
   const submitdetails = async () => {
     const { name, email, password } = userDetails;
     if (!name || !email || !password) {
-      alert("Please enter appropriate entries"); //TODO handle error for each input
+      showNotification("Please enter appropriate entries!", "error");
     } else {
       const API = import.meta.env.VITE_API_URL;
       const response = await fetch(`${API}/register`, {
@@ -47,10 +50,9 @@ const Signup = () => {
       if ("user" in result) {
         localStorage.setItem("user", JSON.stringify(result.user));
         localStorage.setItem("token", JSON.stringify(result.auth));
-        console.log(result);
         navigate("/");
       } else {
-        console.log(result.error);
+        showNotification(result.error, "error");
       }
     }
   };
