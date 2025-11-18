@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./UpdateProduct.css";
+import { useNotification } from "../../context/NotificationContext";
 
 const Updateproduct = () => {
+  const {showNotification} = useNotification()
+
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [productdetails, setProductDetails] = useState({
     name: "",
     price: "",
@@ -25,19 +27,16 @@ const Updateproduct = () => {
       const result = await response.json();
 
       if ("error" in result) {
-        alert(result.error);
-        setError(result.error);
+        showNotification(result.error, "error");
       } else {
         setProductDetails(result);
       }
       setLoading(false);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.error(err.message);
-        setError(err.message);
+        showNotification(err.message, "error");
       } else {
-        console.error("Unexpected error", err);
-        setError("Something went wrong");
+        showNotification("Unexpected Error Occured", "error");
       }
       setLoading(false);
     }
@@ -50,7 +49,7 @@ const Updateproduct = () => {
   const handleUpdateProduct = async () => {
     const { name, price, category, company } = productdetails;
     if (!name || !price || !category || !company) {
-      alert("Please add correct details");
+      showNotification("Please add correct details", "error");
       return false;
     }
     const API = import.meta.env.VITE_API_URL;
@@ -64,8 +63,9 @@ const Updateproduct = () => {
     });
     const result = await response.json();
     if ("error" in result) {
-      alert(result.error);
+      showNotification(result.error, "error");
     } else {
+      showNotification("Product updated successfully !", "success");
       navigate("/");
     }
   };
@@ -133,7 +133,6 @@ const Updateproduct = () => {
     <div className="update-product-container">
       <div className="update-product-div">
         <h1>Update Product</h1>
-        {error ? <div>{error}</div> : null}
         {loading ? <div>Loading......</div> : showUpdateForm()}
       </div>
     </div>
