@@ -54,12 +54,12 @@ app.post("/login", async (req, resp) => {
   if (user) {
     Jwt.sign({ user }, jwtKey, { expiresIn: "1h" }, (err, token) => {
       if (err) {
-        resp.send({ error: "Something went wrong" });
+        return resp.send({ error: "Something went wrong" });
       }
-      resp.send({ user, auth: token });
+      return resp.send({ user, auth: token });
     });
   } else {
-    resp.send({ error: "Invalid email or password" });
+    return resp.send({ error: "Invalid email or password" });
   }
 });
 
