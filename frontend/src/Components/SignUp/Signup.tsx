@@ -50,6 +50,7 @@ const Signup = () => {
       if ("user" in result) {
         localStorage.setItem("user", JSON.stringify(result.user));
         localStorage.setItem("token", JSON.stringify(result.auth));
+        showNotification("Sign up successful.", "success");
         navigate("/");
       } else {
         showNotification(result.error, "error");

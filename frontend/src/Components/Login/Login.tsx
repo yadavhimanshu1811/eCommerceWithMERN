@@ -15,7 +15,7 @@ interface LoginError {
 const Login = () => {
   const navigate = useNavigate();
   const { showNotification } = useNotification();
-  
+
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("user");
     if (isAuthenticated) {
@@ -47,6 +47,7 @@ const Login = () => {
       } else {
         localStorage.setItem("user", JSON.stringify(result.user));
         localStorage.setItem("token", JSON.stringify(result.auth));
+        showNotification("User logged in successfully", "success");
         navigate("/");
       }
     }
