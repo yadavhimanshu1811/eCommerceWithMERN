@@ -139,8 +139,12 @@ app.put("/updateproduct/:id", verifyToken, async (req, resp) => {
 });
 
 app.delete("/deleteproduct/:id", verifyToken, async (req, resp) => {
-  const result = await Product.deleteOne({ _id: req.params.id });
-  resp.send(result);
+  try {
+    const result = await Product.deleteOne({ _id: req.params.id });
+    resp.send(result);
+  } catch (error) {
+    resp.send({"error": "Something went wrong !"});
+  }
 });
 
 app.get("/search/:key", verifyToken, async (req, resp) => {

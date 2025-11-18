@@ -41,7 +41,9 @@ const GetProduct = () => {
       },
     });
     const result = await response.json();
-    if (result) {
+    if ("error" in result){
+      showNotification(result.error, "error")
+    } else {
       showNotification("Product deleted successfully", "success")
       getProducts();
     }
