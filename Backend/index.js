@@ -28,6 +28,7 @@ app.use(cors({
 //           SIGNUP
 // =============================
 app.post("/register", async (req, resp) => {
+  await new Promise(resolve => setTimeout(resolve, 2000)); // 2 sec delay
   let user = new User(req.body);
   let result = await user.save();
   result = result.toObject();
@@ -45,6 +46,7 @@ app.post("/register", async (req, resp) => {
 //           LOGIN
 // =============================
 app.post("/login", async (req, resp) => {
+  await new Promise(resolve => setTimeout(resolve, 2000)); // 2 sec delay
   if (!req.body.email || !req.body.password) {
     return resp.send({ error: "Email and password required" });
   }
@@ -84,8 +86,9 @@ app.put("/updateuser/:id", verifyToken, async(req, resp)=>{
 // =============================
 //      VERIFY TOKEN MIDDLEWARE
 // =============================
-function verifyToken(req, resp, next) {
+async function verifyToken(req, resp, next) {
   let token = req.headers["authorization"];
+  await new Promise(resolve => setTimeout(resolve, 2000)); // 2 sec delay
   if (token) {
     Jwt.verify(token, jwtKey, (err, valid) => {
       if (err) {
