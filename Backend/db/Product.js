@@ -6,6 +6,7 @@ const productSchema = new mongoose.Schema({
     userID: String,
     company: String,
     contact: String,
+    userEmail: String,
 
 });
 module.exports = mongoose.model("products", productSchema);   //products: table name in db

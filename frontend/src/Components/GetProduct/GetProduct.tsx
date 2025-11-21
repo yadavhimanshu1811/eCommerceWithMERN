@@ -10,6 +10,7 @@ interface Product {
   company: string;
   price: string;
   contact: string;
+  userEmail: string;
   _id: string;
 }
 
@@ -17,6 +18,7 @@ const GetProduct = () => {
   const { showNotification } = useNotification();
   const [products, setProducts] = useState([]);
   const [loading, setloading] = useState(true);
+  const userEmail = JSON.parse(localStorage.getItem("user") ?? "{}")?.email;
 
   const getProducts = async () => {
     //TODO add pagination later
@@ -118,7 +120,7 @@ const GetProduct = () => {
                   <div className="cell">{item.company}</div>
                   <div className="cell">{item.category}</div>
                   <div className="cell">{item.contact}</div>
-                  <div className="cell">
+                  {item.userEmail === userEmail ? <div className="cell">
                     <button
                       className="delete-btn"
                       onClick={() => deleteProduct(item._id)}
@@ -128,7 +130,7 @@ const GetProduct = () => {
                     <Link to={`/update/${item._id}`}>
                       <button>Update</button>
                     </Link>
-                  </div>
+                  </div> : null}
                 </div>
               );
             })}
