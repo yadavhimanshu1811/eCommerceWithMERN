@@ -9,6 +9,7 @@ interface Product {
   category: string;
   company: string;
   price: string;
+  contact: string;
   _id: string;
 }
 
@@ -98,6 +99,7 @@ const GetProduct = () => {
           <div className="cell-header">price</div>
           <div className="cell-header">company</div>
           <div className="cell-header">category</div>
+          <div className="cell-header">contact</div>
           <div className="cell-header">Actions</div>
         </div>
 
@@ -115,6 +117,7 @@ const GetProduct = () => {
                   <div className="cell">{item.price}</div>
                   <div className="cell">{item.company}</div>
                   <div className="cell">{item.category}</div>
+                  <div className="cell">{item.contact}</div>
                   <div className="cell">
                     <button
                       className="delete-btn"

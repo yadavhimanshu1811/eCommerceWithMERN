@@ -8,6 +8,8 @@ interface ProductDetails {
   price: string;
   category: string;
   company: string;
+  contact: string;
+  // imageURL: string
 }
 
 export const AddProduct = () => {
@@ -17,6 +19,8 @@ export const AddProduct = () => {
     price: "",
     category: "",
     company: "",
+    contact: "",
+    // imageURL: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -41,9 +45,9 @@ export const AddProduct = () => {
   }, []);
 
   const handleAddProduct = async () => {
-    const { name, price, category, company } = productDetails;
+    const { name, price, category, company, contact } = productDetails;
 
-    if (!name || !price || !category || !company) {
+    if (!name || !price || !category || !company || !contact) {
       showNotification("Please add correct details", "error");
       nameRef.current?.focus();
       return;
@@ -71,6 +75,8 @@ export const AddProduct = () => {
           price: "",
           category: "",
           company: "",
+          contact:"",
+          // imageURL:""
         });
 
         nameRef.current?.focus();
@@ -145,6 +151,32 @@ export const AddProduct = () => {
                   })
                 }
               />
+              <input
+                className="input-box"
+                placeholder="Enter contact number"
+                value={productDetails.contact}
+                ref={companyRef}
+                onKeyDown={(e) => handleKeyDown(e, submitRef)}
+                onChange={(e) =>
+                  setProductDetails({
+                    ...productDetails,
+                    contact: e.target.value,
+                  })
+                }
+              />
+              {/* <input
+                className="input-box"
+                placeholder="Enter company"
+                value={productDetails.company}
+                ref={companyRef}
+                onKeyDown={(e) => handleKeyDown(e, submitRef)}
+                onChange={(e) =>
+                  setProductDetails({
+                    ...productDetails,
+                    company: e.target.value,
+                  })
+                }
+              /> */}
 
               <button ref={submitRef} onClick={handleAddProduct}>
                 Add Product

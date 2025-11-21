@@ -4,7 +4,8 @@ const productSchema = new mongoose.Schema({
     price: String,
     category: String,
     userID: String,
-    company: String
+    company: String,
+    contact: String,
 
 });
 module.exports = mongoose.model("products", productSchema);   //products: table name in db
