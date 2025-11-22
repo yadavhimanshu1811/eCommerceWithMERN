@@ -109,8 +109,12 @@ app.post("/addproduct", verifyToken, async (req, resp) => {
 });
 
 app.get("/getproducts", verifyToken, async (req, resp) => {
-  let product = await Product.find();
-  resp.send(product);
+  try {
+    let product = await Product.find();
+    resp.send(product);
+  } catch (error) {
+    resp.send({"error": error.message});
+  }
 });
 
 app.get("/getproduct/:id", verifyToken, async (req, resp) => {

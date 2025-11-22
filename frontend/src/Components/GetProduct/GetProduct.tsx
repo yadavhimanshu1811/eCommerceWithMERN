@@ -29,13 +29,14 @@ const GetProduct = () => {
       },
     });
     const result = await response.json();
+    console.log("result", result)
+    setloading(false);
     if ("error" in result) {
-      alert(result.error);
+      showNotification(result.error, "error")
     } else {
       console.log("get product", result);
       setProducts(result);
     }
-    setloading(false);
   };
 
   const deleteProduct = async (id: string) => {
