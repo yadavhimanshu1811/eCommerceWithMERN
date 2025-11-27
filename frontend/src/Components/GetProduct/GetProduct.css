@@ -7,7 +7,7 @@
 
 .product-container-div {
   width: 80%;
-  max-width: 800px;
+  max-width: 1000px;
   background-color: #fff;
   box-shadow: 0 0 30px rgb(104, 101, 101);
   border-radius: 15px;
@@ -16,7 +16,7 @@
 }
 
 .product-list {
-  max-height: 225px;
+  max-height: 325px;
   overflow-y: auto;
 }
 
@@ -162,6 +162,11 @@ h1 + h1 {
   /* completely remove header row on small screens */
   .product-container-div > .row:first-of-type {
     display: none;
+  }
+
+  .product-list {
+    max-height: 100%;
+    overflow-y: scroll;
   }
 
   .row {
