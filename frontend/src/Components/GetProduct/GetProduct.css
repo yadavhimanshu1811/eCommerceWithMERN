@@ -101,6 +101,51 @@ button.delete-btn:hover {
   background-color: #a71d2a;
 }
 
+/* Wrap each button + tooltip */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+/* Disabled button styling */
+.disabled-btn {
+  padding: 6px 10px;
+  cursor: not-allowed;
+  opacity: 0.6;
+  border: 1px solid #ccc;
+  background-color: #e0e0e0;
+  color: #555;
+}
+
+/* Tooltip text */
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  width: 150px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 6px;
+  border-radius: 4px;
+
+  /* position tooltip ABOVE the button */
+  position: absolute;
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  transition: opacity 0.2s ease-in-out;
+  font-size: 12px;
+  z-index: 20;
+}
+
+/* Show tooltip on hover of wrapper */
+.tooltip-wrapper:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
 h1 + h1 {
   text-align: center;
   color: #777;

@@ -17,7 +17,7 @@ interface Product {
   price: string;
   contact: string;
   _id: string;
-  user: User
+  user: User;
 }
 
 const GetProduct = () => {
@@ -35,10 +35,10 @@ const GetProduct = () => {
       },
     });
     const result = await response.json();
-    console.log("get product result", result)
+    console.log("get product result", result);
     setloading(false);
     if ("error" in result) {
-      showNotification(result.error, "error")
+      showNotification(result.error, "error");
     } else {
       setProducts(result);
     }
@@ -127,17 +127,36 @@ const GetProduct = () => {
                   <div className="cell">{item.company}</div>
                   <div className="cell">{item.category}</div>
                   <div className="cell">{item.contact}</div>
-                  {item.user._id === currentUserId ? <div className="cell">
-                    <button
-                      className="delete-btn"
-                      onClick={() => deleteProduct(item._id)}
-                    >
-                      Delete
-                    </button>
-                    <Link to={`/update/${item._id}`}>
-                      <button>Update</button>
-                    </Link>
-                  </div> : null}
+                  {item.user._id === currentUserId ? (
+                    <div className="cell">
+                      <button
+                        className="delete-btn"
+                        onClick={() => deleteProduct(item._id)}
+                      >
+                        Delete
+                      </button>
+                      <Link to={`/update/${item._id}`}>
+                        <button>Update</button>
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="cell tooltip-wrapper">
+                      <button className="disabled-btn" disabled>
+                        Delete
+                      </button>
+                      <span className="tooltip-text">
+                        Only the user who added this product can edit or delete
+                        it.
+                      </span>
+                      <button className="disabled-btn" disabled>
+                        Update
+                      </button>
+                      <span className="tooltip-text">
+                        Only the user who added this product can edit or delete
+                        it.
+                      </span>
+                    </div>
+                  )}
                 </div>
               );
             })}
