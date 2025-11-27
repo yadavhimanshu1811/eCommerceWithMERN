@@ -53,13 +53,11 @@ export const AddProduct = () => {
       return;
     }
     setLoading(true);
-    const userID = JSON.parse(localStorage.getItem("user") ?? "{}")?._id;
-    const userEmail = JSON.parse(localStorage.getItem("user") ?? "{}")?.email;
     const API = import.meta.env.VITE_API_URL;
     try {
       const response = await fetch(`${API}/addproduct`, {
         method: "post",
-        body: JSON.stringify({ ...productDetails, userID, userEmail }),
+        body: JSON.stringify(productDetails),
         headers: {
           "Content-Type": "application/json",
           authorization: JSON.parse(localStorage.getItem("token") || ""),

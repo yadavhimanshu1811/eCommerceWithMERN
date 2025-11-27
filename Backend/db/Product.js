@@ -1,12 +1,15 @@
 const mongoose = require("mongoose");
+require("./User"); 
 const productSchema = new mongoose.Schema({
     name: String,
     price: String,
     category: String,
-    userID: String,
     company: String,
     contact: String,
-    userEmail: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users"
+    }
 
 });
 module.exports = mongoose.model("products", productSchema);   //products: table name in db

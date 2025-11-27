@@ -84,18 +84,36 @@ app.put("/updateuser/:id", verifyToken, async(req, resp)=>{
 // =============================
 //      VERIFY TOKEN MIDDLEWARE
 // =============================
-function verifyToken(req, resp, next) {
-  let token = req.headers["authorization"];
-  if (token) {
-    Jwt.verify(token, jwtKey, (err, valid) => {
-      if (err) {
-        resp.status(401).send({ error: "Invalid authorization! Login again" });
-      } else {
-        next();
-      }
-    });
-  } else {
-    resp.status(403).send({ error: "No token provided" });
+async function verifyToken(req, res, next) {
+  const token = req.headers["authorization"];
+
+  if (!token) {
+    return res.status(403).send({ error: "No token provided" });
+  }
+
+  try {
+    const decoded = Jwt.verify(token, jwtKey);
+
+    // Support both structures from your login and register routes
+    const userData = decoded.user || decoded.result;
+
+    if (!userData) {
+      return res.status(401).send({ error: "Invalid token structure" });
+    }
+
+    // Fetch full user document from DB
+    const user = await User.findById(userData._id).select("-password");
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    // 💥 This is the MOST important line
+    req.user = user;
+
+    next();
+  } catch (err) {
+    return res.status(401).send({ error: "Invalid token, login again" });
   }
 }
 
@@ -103,14 +121,14 @@ function verifyToken(req, resp, next) {
 //         PRODUCT ROUTES
 // =============================
 app.post("/addproduct", verifyToken, async (req, resp) => {
-  let product = new Product(req.body);
+  let product = new Product({...req.body, user: req.user._id  });
   let result = await product.save();
   resp.send(result);
 });
 
 app.get("/getproducts", verifyToken, async (req, resp) => {
   try {
-    let product = await Product.find();
+    let product = await Product.find().populate("user");
     resp.send(product);
   } catch (error) {
     resp.send({"error": error.message});
@@ -124,7 +142,7 @@ app.get("/getproduct/:id", verifyToken, async (req, resp) => {
     return resp.status(400).send({ error: "Invalid product ID" });
   }
 
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).populate("user");
 
   if (!product) {
     return resp.status(404).send({ error: "No product found" });
@@ -162,7 +180,7 @@ app.get("/search/:key", verifyToken, async (req, resp) => {
       { name: { $regex: req.params.key, $options: "i" } },
       { company: { $regex: req.params.key, $options: "i" } },
     ],
-  });
+  }).populate("user");;
   resp.send(result);
 });
 
