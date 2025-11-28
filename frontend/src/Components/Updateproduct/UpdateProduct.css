@@ -5,9 +5,9 @@
 }
 
 .update-product-div{
-    width:50%;
+    min-width:300px;
     max-width: 500px;
-    height: 260px;
+    height: 330px;
     display: flex;
     flex-direction: column;
     gap:5px;

@@ -5,7 +5,7 @@ import { useNotification } from "../../context/NotificationContext";
 import Loader from "../Loader/Loader";
 
 const Updateproduct = () => {
-  const {showNotification} = useNotification()
+  const { showNotification } = useNotification();
 
   const [loading, setLoading] = useState(true);
   const [productdetails, setProductDetails] = useState({
@@ -13,6 +13,7 @@ const Updateproduct = () => {
     price: "",
     category: "",
     company: "",
+    contact: "",
   });
   const { id } = useParams();
   const navigate = useNavigate();
@@ -48,8 +49,8 @@ const Updateproduct = () => {
   }, []);
 
   const handleUpdateProduct = async () => {
-    const { name, price, category, company } = productdetails;
-    if (!name || !price || !category || !company) {
+    const { name, price, category, company, contact } = productdetails;
+    if (!name || !price || !category || !company || !contact) {
       showNotification("Please add correct details", "error");
       return false;
     }
@@ -126,6 +127,19 @@ const Updateproduct = () => {
             }}
           />
         </div>
+        <div className="product-detail">
+          <span>Contact:</span>
+          <input
+            placeholder="Enter contact number"
+            value={productdetails.contact}
+            onChange={(e) =>
+              setProductDetails({
+                ...productdetails,
+                contact: e.target.value,
+              })
+            }
+          />
+        </div>
         <button onClick={handleUpdateProduct}>Update</button>
       </>
     );
@@ -134,7 +148,7 @@ const Updateproduct = () => {
     <div className="update-product-container">
       <div className="update-product-div">
         <h1>Update Product</h1>
-        {loading ? <Loader/> : showUpdateForm()}
+        {loading ? <Loader /> : showUpdateForm()}
       </div>
     </div>
   );

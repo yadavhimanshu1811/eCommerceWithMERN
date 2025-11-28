@@ -105,11 +105,12 @@ const GetProduct = () => {
 
         <div className="row">
           <div className="cell-header">S.no</div>
-          <div className="cell-header">name</div>
-          <div className="cell-header">price</div>
-          <div className="cell-header">company</div>
-          <div className="cell-header">category</div>
-          <div className="cell-header">contact</div>
+          <div className="cell-header">Name</div>
+          <div className="cell-header">Price</div>
+          <div className="cell-header">Company</div>
+          <div className="cell-header">Category</div>
+          <div className="cell-header">Contact</div>
+          <div className="cell-header">Image</div>
           <div className="cell-header">Actions</div>
         </div>
 

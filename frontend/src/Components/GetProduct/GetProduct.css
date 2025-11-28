@@ -46,7 +46,7 @@ input:focus {
 /* Desktop layout */
 .row {
   display: grid;
-  grid-template-columns: 60px 1fr 1fr 1fr 1fr 1fr 160px;
+  grid-template-columns: 60px 1fr 1fr 1fr 1fr 1fr 1fr 160px;
   align-items: center;
   padding: 5px 0;
   border-bottom: 1px solid #eee;

@@ -9,7 +9,6 @@ interface ProductDetails {
   category: string;
   company: string;
   contact: string;
-  // imageURL: string
 }
 
 export const AddProduct = () => {
@@ -20,10 +19,9 @@ export const AddProduct = () => {
     category: "",
     company: "",
     contact: "",
-    // imageURL: "",
   });
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState<File | null>(null);
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const priceRef = useRef<HTMLInputElement | null>(null);
@@ -48,8 +46,8 @@ export const AddProduct = () => {
   const handleAddProduct = async () => {
     const { name, price, category, company, contact } = productDetails;
 
-    if (!name || !price || !category || !company || !contact) {
-      showNotification("Please add correct details", "error");
+    if (!name || !price || !category || !company || !contact || !image) {
+      showNotification("Please add all the details correctly.", "error");
       nameRef.current?.focus();
       return;
     }
@@ -60,7 +58,7 @@ export const AddProduct = () => {
     formData.append("category", category);
     formData.append("company", company);
     formData.append("contact", contact);
-    formData.append("image", image); // must be File object
+    image && formData.append("image", image);
     const API = import.meta.env.VITE_API_URL;
     try {
       const response = await fetch(`${API}/addproduct`, {
@@ -174,7 +172,7 @@ export const AddProduct = () => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setImage(e.target.files[0])}
+                onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
               />
 
               <button ref={submitRef} onClick={handleAddProduct}>
