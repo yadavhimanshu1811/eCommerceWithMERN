@@ -3,10 +3,11 @@ const express = require("express"); //Backend framework
 const cors = require("cors");  //allows frontend (React) to talk to backend
 const mongoose = require("mongoose");
 const Jwt = require("jsonwebtoken");
-
 const jwtKey = process.env.JWT_SECRET;
 
 require("./db/config"); // DB connection
+const upload = require("./utils/multer");
+const cloudinary = require("./utils/cloudinary");
 
  //Importing Mongoose Models: These define shapes (schema) of User and Product documents in MongoDB.
 const User = require("./db/User"); 
@@ -120,11 +121,42 @@ async function verifyToken(req, res, next) {
 // =============================
 //         PRODUCT ROUTES
 // =============================
-app.post("/addproduct", verifyToken, async (req, resp) => {
-  let product = new Product({...req.body, user: req.user._id  });
-  let result = await product.save();
-  resp.send(result);
+app.post("/addproduct", verifyToken, upload.single("image"), async (req, resp) => {
+  try {
+    let imageUrl = "";
+    
+    if (req.file) {
+      const uploadResult = await uploadToCloudinary(req.file.buffer);
+      imageUrl = uploadResult.secure_url;
+    }
+
+    const product = new Product({
+      ...req.body,
+      user: req.user._id,
+      image: imageUrl,
+    });
+
+    const saved = await product.save();
+    resp.send(saved);
+
+  } catch (error) {
+    console.error(error);
+    resp.status(500).send({ error: error.message });
+  }
 });
+
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "products" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    stream.end(fileBuffer);
+  });
+};
 
 app.get("/getproducts", verifyToken, async (req, resp) => {
   try {

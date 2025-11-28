@@ -18,6 +18,7 @@ interface Product {
   contact: string;
   _id: string;
   user: User;
+  image: string;
 }
 
 const GetProduct = () => {
@@ -127,6 +128,7 @@ const GetProduct = () => {
                   <div className="cell">{item.company}</div>
                   <div className="cell">{item.category}</div>
                   <div className="cell">{item.contact}</div>
+                  <img src={item.image} alt="product" width="80" height="80" />
                   {item.user._id === currentUserId ? (
                     <div className="cell">
                       <button

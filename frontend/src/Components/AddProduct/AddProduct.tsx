@@ -23,6 +23,7 @@ export const AddProduct = () => {
     // imageURL: "",
   });
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState();
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const priceRef = useRef<HTMLInputElement | null>(null);
@@ -53,13 +54,21 @@ export const AddProduct = () => {
       return;
     }
     setLoading(true);
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("category", category);
+    formData.append("company", company);
+    formData.append("contact", contact);
+    formData.append("image", image); // must be File object
     const API = import.meta.env.VITE_API_URL;
     try {
       const response = await fetch(`${API}/addproduct`, {
         method: "post",
-        body: JSON.stringify(productDetails),
+        // body: JSON.stringify({ ...productDetails, image }),
+        body: formData,
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           authorization: JSON.parse(localStorage.getItem("token") || ""),
         },
       });
@@ -74,8 +83,7 @@ export const AddProduct = () => {
           price: "",
           category: "",
           company: "",
-          contact:"",
-          // imageURL:""
+          contact: "",
         });
 
         nameRef.current?.focus();
@@ -163,19 +171,11 @@ export const AddProduct = () => {
                   })
                 }
               />
-              {/* <input
-                className="input-box"
-                placeholder="Enter company"
-                value={productDetails.company}
-                ref={companyRef}
-                onKeyDown={(e) => handleKeyDown(e, submitRef)}
-                onChange={(e) =>
-                  setProductDetails({
-                    ...productDetails,
-                    company: e.target.value,
-                  })
-                }
-              /> */}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
 
               <button ref={submitRef} onClick={handleAddProduct}>
                 Add Product
