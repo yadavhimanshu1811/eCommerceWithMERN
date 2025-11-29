@@ -128,7 +128,7 @@ const Updateproduct = () => {
           />
         </div>
         <div className="product-detail">
-          <span>Contact:</span>
+          <span>Contact No.:</span>
           <input
             placeholder="Enter contact number"
             value={productdetails.contact}
