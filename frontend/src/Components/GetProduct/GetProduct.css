@@ -20,6 +20,12 @@
   overflow-y: auto;
 }
 
+.product-list.empty{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 h1 {
   text-align: center;
   color: #333;

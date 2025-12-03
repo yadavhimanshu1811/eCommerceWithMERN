@@ -128,12 +128,13 @@ const GetProduct = () => {
 
   useEffect(() => {
     if (loading) return; // wait until products are rendered; prevents triggering infinite scroll repeatedly during load
-    if (!loaderRef.current) return;  //If loader div or list div is not rendered yet, do nothing
+    if (!loaderRef.current) return; //If loader div or list div is not rendered yet, do nothing
     if (!listRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) { //This becomes true when the loader div is visible inside the scroll area.
+        if (entries[0].isIntersecting) {
+          //This becomes true when the loader div is visible inside the scroll area.
           console.log("REACHED BOTTOM");
           setpage((prev) => prev + 1);
         }
@@ -141,7 +142,7 @@ const GetProduct = () => {
       {
         root: listRef.current, // the scrollable div, NOT the window
         rootMargin: "0px", //No extra margin.
-        threshold: 0.1,  // when 10% of div is visible
+        threshold: 0.1, // when 10% of div is visible
       }
     );
 
@@ -231,14 +232,15 @@ const GetProduct = () => {
               </div>
             ) : null} */}
             {products.length < totalProducts && !isSearch ? (
-              <div
-                ref={loaderRef}
-                style={{ height: 20 }}
-              ><Loader size="sm"/></div>
+              <div ref={loaderRef} style={{ height: 20 }}>
+                <Loader size="sm" />
+              </div>
             ) : null}
           </div>
         ) : (
-          <h1>No products found</h1>
+          <div className="product-list empty">
+            <h1>No products found</h1>
+          </div>
         )}
       </div>
     </div>
