@@ -46,8 +46,8 @@ export const AddProduct = () => {
   const handleAddProduct = async () => {
     const { name, price, category, company, contact } = productDetails;
 
-    if (!name || !price || !category || !company || !contact || !image) {
-      showNotification(image ? "Please add all the details correctly." : "Please add the image.", "error");
+    if (!name || !price || !category || !company || !contact) {
+      showNotification("Please add all the details correctly.", "error");
       nameRef.current?.focus();
       return;
     }
