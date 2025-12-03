@@ -160,8 +160,30 @@ const uploadToCloudinary = (fileBuffer) => {
 
 app.get("/getproducts", verifyToken, async (req, resp) => {
   try {
-    let product = await Product.find().populate("user");
-    resp.send(product);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 4;  
+    const skip = (page - 1) * limit;
+
+    // total documents
+    const total = await Product.countDocuments();
+
+    // fetch paginated products
+    const products = await Product.find()
+      .populate("user")
+      .skip(skip)
+      .limit(limit);
+
+    resp.send({
+      data: products,
+      meta: {
+        totalItems: total,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+        pageSize: limit,
+      },
+    });
+    // let products = await Product.find().populate("user");
+    // resp.send(products);
   } catch (error) {
     resp.send({"error": error.message});
   }
@@ -181,6 +203,17 @@ app.get("/getproduct/:id", verifyToken, async (req, resp) => {
   }
 
   resp.send(product);
+});
+
+app.get("/search/:key", verifyToken, async (req, resp) => {
+  // $or: OR operator in mongoDB | $options: "i" → case-insensitive | $regex allows partial matching 
+  let result = await Product.find({
+    "$or": [
+      { name: { $regex: req.params.key, $options: "i" } },
+      { company: { $regex: req.params.key, $options: "i" } },
+    ],
+  }).populate("user");;
+  resp.send(result);
 });
 
 app.put("/updateproduct/:id", verifyToken, async (req, resp) => {
@@ -203,17 +236,6 @@ app.delete("/deleteproduct/:id", verifyToken, async (req, resp) => {
   } catch (error) {
     resp.send({"error": "Something went wrong !"});
   }
-});
-
-app.get("/search/:key", verifyToken, async (req, resp) => {
-  // $or: OR operator in mongoDB | $options: "i" → case-insensitive | $regex allows partial matching 
-  let result = await Product.find({
-    "$or": [
-      { name: { $regex: req.params.key, $options: "i" } },
-      { company: { $regex: req.params.key, $options: "i" } },
-    ],
-  }).populate("user");;
-  resp.send(result);
 });
 
 // =============================

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./GetProduct.css";
 import { Link } from "react-router-dom";
 import { useNotification } from "../../context/NotificationContext";
@@ -23,25 +23,31 @@ interface Product {
 
 const GetProduct = () => {
   const { showNotification } = useNotification();
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([] as any[]);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [page, setpage] = useState(1);
+  const limit = 4;
   const [loading, setloading] = useState(true);
   const currentUserId = JSON.parse(localStorage.getItem("user") ?? "{}")?._id;
 
   const getProducts = async () => {
-    //TODO add pagination later
     const API = import.meta.env.VITE_API_URL;
-    const response = await fetch(`${API}/getproducts`, {
-      headers: {
-        authorization: JSON.parse(localStorage.getItem("token") || ""),
-      },
-    });
+    const response = await fetch(
+      `${API}/getproducts?page=${page}&limit=${limit}`,
+      {
+        headers: {
+          authorization: JSON.parse(localStorage.getItem("token") || ""),
+        },
+      }
+    );
     const result = await response.json();
     console.log("get product result", result);
     setloading(false);
     if ("error" in result) {
       showNotification(result.error, "error");
     } else {
-      setProducts(result);
+      setProducts((prev) => [...prev, ...result.data]);
+      setTotalProducts(result.meta.totalItems);
     }
   };
 
@@ -64,9 +70,16 @@ const GetProduct = () => {
     }
   };
 
+  const isFirstCall = useRef(true);
   useEffect(() => {
+    if (isFirstCall.current) {
+      isFirstCall.current = false;
+    } else if (page === 1) {
+      return; // Prevent double page=1 load
+    }
+
     getProducts();
-  }, []);
+  }, [page]);
 
   let debounceTimer: ReturnType<typeof setTimeout>; //TODO revise
 
@@ -93,10 +106,14 @@ const GetProduct = () => {
     }, 500); // ⏱️ wait 500ms after typing stops
   };
 
+  const handleLoadMore = () => {
+    setpage((prev) => prev + 1);
+  };
+
   return (
     <div className="product-container">
       <div className="product-container-div">
-        <h1>Products List {loading ? "" : `(${products.length} items)`}</h1>
+        <h1>Products List {loading ? "" : `(${totalProducts} items)`}</h1>
         <input
           placeholder="Search product"
           onChange={(e) => handleSearch(e.target.value)}
@@ -163,6 +180,11 @@ const GetProduct = () => {
                 </div>
               );
             })}
+            {products.length < totalProducts ? (
+              <div className="load-more">
+                <button onClick={handleLoadMore}>Load more</button>
+              </div>
+            ) : null}
           </div>
         ) : (
           <h1>No products found</h1>
