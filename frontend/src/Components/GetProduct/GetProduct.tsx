@@ -28,12 +28,13 @@ const GetProduct = () => {
   const [page, setpage] = useState(1);
   const limit = 4;
   const [loading, setloading] = useState(true);
+  const [isSearch, setIsSearch] = useState(false);
   const currentUserId = JSON.parse(localStorage.getItem("user") ?? "{}")?._id;
 
-  const getProducts = async () => {
+  const getProducts = async (afterSearch ?: Boolean) => {
     const API = import.meta.env.VITE_API_URL;
     const response = await fetch(
-      `${API}/getproducts?page=${page}&limit=${limit}`,
+      `${API}/getproducts?page=${afterSearch ? 1 : page}&limit=${limit}`,
       {
         headers: {
           authorization: JSON.parse(localStorage.getItem("token") || ""),
@@ -81,30 +82,39 @@ const GetProduct = () => {
     getProducts();
   }, [page]);
 
-  let debounceTimer: ReturnType<typeof setTimeout>; //TODO revise
+ const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleSearch = (searchString: string) => {
-    setloading(true);
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(async () => {
-      if (searchString.trim()) {
-        const API = import.meta.env.VITE_API_URL;
-        const response = await fetch(`${API}/search/${searchString}`, {
-          headers: {
-            authorization: JSON.parse(localStorage.getItem("token") || ""),
-          },
-        });
-        const result = await response.json();
-        console.log("search result", result);
-        if (result) {
-          setProducts(result);
-          setloading(false);
-        }
-      } else {
-        getProducts();
+const handleSearch = (searchString: string) => {
+  setIsSearch(true);
+  setloading(true);
+  if (debounceTimer.current) {
+    clearTimeout(debounceTimer.current);
+  }
+
+  debounceTimer.current = setTimeout(async () => {
+    if (searchString.trim()) {
+      const API = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API}/search/${searchString}`, {
+        headers: {
+          authorization: JSON.parse(localStorage.getItem("token") || ""),
+        },
+      });
+      const result = await response.json();
+      console.log("search result", result);
+      if (result) {
+        setProducts(result);
       }
-    }, 500); // ⏱️ wait 500ms after typing stops
-  };
+      setloading(false);
+    } else {
+      // if empty → reset pagination
+      setProducts([]);
+      setpage(1);
+      setloading(true);
+      getProducts(true);
+      setIsSearch(false);
+    }
+  }, 500); // Recommended: 300-500ms debounce
+};
 
   const handleLoadMore = () => {
     setpage((prev) => prev + 1);
@@ -113,7 +123,7 @@ const GetProduct = () => {
   return (
     <div className="product-container">
       <div className="product-container-div">
-        <h1>Products List {loading ? "" : `(${totalProducts} items)`}</h1>
+        <h1>Products List {loading ? "" : `(${isSearch ? products.length : totalProducts} items)`}</h1>
         <input
           placeholder="Search product"
           onChange={(e) => handleSearch(e.target.value)}
@@ -180,7 +190,7 @@ const GetProduct = () => {
                 </div>
               );
             })}
-            {products.length < totalProducts ? (
+            {products.length < totalProducts && !isSearch ? (
               <div className="load-more">
                 <button onClick={handleLoadMore}>Load more</button>
               </div>
