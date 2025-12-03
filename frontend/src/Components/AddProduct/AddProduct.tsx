@@ -47,7 +47,7 @@ export const AddProduct = () => {
     const { name, price, category, company, contact } = productDetails;
 
     if (!name || !price || !category || !company || !contact || !image) {
-      showNotification("Please add all the details correctly.", "error");
+      showNotification(image ? "Please add all the details correctly." : "Please add the image.", "error");
       nameRef.current?.focus();
       return;
     }
