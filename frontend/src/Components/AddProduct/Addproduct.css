@@ -23,3 +23,17 @@
 .add-product-div input{
     margin-bottom: 0px;
 }
+
+.input-box {
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.input-box.error {
+  border: 1px solid red;
+  color: black;
+  background: white;
+}

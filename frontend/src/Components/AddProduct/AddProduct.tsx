@@ -20,6 +20,13 @@ export const AddProduct = () => {
     company: "",
     contact: "",
   });
+  const [errorObj, setErrorObj] = useState({
+    name: false,
+    price: false,
+    category: false,
+    company: false,
+    contact: false,
+  });
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
 
@@ -45,12 +52,20 @@ export const AddProduct = () => {
 
   const handleAddProduct = async () => {
     const { name, price, category, company, contact } = productDetails;
+    let emptyInput = false;
+    Object.keys(errorObj).forEach((key) => {
+      if (productDetails[key as keyof typeof productDetails]?.trim() === "") {
+        errorObj[key as keyof typeof errorObj] = true;
+        showNotification("Please add all the details correctly.", "error");
+        emptyInput = true;
+      }else{
+        errorObj[key as keyof typeof errorObj] = false;
+      }
+    });
+    console.log(errorObj);
+    setErrorObj(errorObj);
+    if(emptyInput)return;
 
-    if (!name || !price || !category || !company || !contact) {
-      showNotification("Please add all the details correctly.", "error");
-      nameRef.current?.focus();
-      return;
-    }
     setLoading(true);
     const formData = new FormData();
     formData.append("name", name);
@@ -102,7 +117,7 @@ export const AddProduct = () => {
           ) : (
             <>
               <input
-                className="input-box"
+                className={errorObj.name ? "input-box error" : "input-box"}
                 placeholder="Enter Name"
                 value={productDetails.name}
                 ref={nameRef}
@@ -116,7 +131,7 @@ export const AddProduct = () => {
               />
 
               <input
-                className="input-box"
+                className={errorObj.price ? "input-box error" : "input-box"}
                 placeholder="Enter price"
                 value={productDetails.price}
                 ref={priceRef}
@@ -130,7 +145,7 @@ export const AddProduct = () => {
               />
 
               <input
-                className="input-box"
+                className={errorObj.category ? "input-box error" : "input-box"}
                 placeholder="Enter category"
                 value={productDetails.category}
                 ref={categoryRef}
@@ -144,7 +159,7 @@ export const AddProduct = () => {
               />
 
               <input
-                className="input-box"
+                className={errorObj.company ? "input-box error" : "input-box"}
                 placeholder="Enter company"
                 value={productDetails.company}
                 ref={companyRef}
@@ -157,7 +172,7 @@ export const AddProduct = () => {
                 }
               />
               <input
-                className="input-box"
+                className={errorObj.contact ? "input-box error" : "input-box"}
                 placeholder="Enter contact number"
                 value={productDetails.contact}
                 ref={companyRef}
@@ -172,7 +187,9 @@ export const AddProduct = () => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+                onChange={(e) =>
+                  setImage(e.target.files ? e.target.files[0] : null)
+                }
               />
 
               <button ref={submitRef} onClick={handleAddProduct}>
