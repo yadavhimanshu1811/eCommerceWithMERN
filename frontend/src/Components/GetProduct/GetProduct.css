@@ -16,7 +16,7 @@
 }
 
 .product-list {
-  height: 320px;
+  height: 290px;
   overflow-y: auto;
 }
 
@@ -73,7 +73,7 @@ input:focus {
 }
 
 .loader-parent {
-  height: 320px;
+  height: 290px;
   width: 100%;
   display: flex;
   align-items: center;

@@ -123,31 +123,31 @@ const GetProduct = () => {
   //   setpage((prev) => prev + 1);
   // };
 
-  const listRef = useRef(null);
-  const loaderRef = useRef(null);
+  const listRef = useRef(null); // refers to the scrollable container
+  const loaderRef = useRef(null); // refers to the invisible div at bottom which triggers loading next page
 
   useEffect(() => {
-    if (loading) return; // wait until products are rendered
-    if (!loaderRef.current) return;
+    if (loading) return; // wait until products are rendered; prevents triggering infinite scroll repeatedly during load
+    if (!loaderRef.current) return;  //If loader div or list div is not rendered yet, do nothing
     if (!listRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting) { //This becomes true when the loader div is visible inside the scroll area.
           console.log("REACHED BOTTOM");
           setpage((prev) => prev + 1);
         }
       },
       {
-        root: listRef.current,
-        rootMargin: "0px",
-        threshold: 0.1,
+        root: listRef.current, // the scrollable div, NOT the window
+        rootMargin: "0px", //No extra margin.
+        threshold: 0.1,  // when 10% of div is visible
       }
     );
 
-    observer.observe(loaderRef.current);
+    observer.observe(loaderRef.current); //“Start watching this loader div. When it appears inside scroll area → run callback.”
 
-    return () => observer.disconnect();
+    return () => observer.disconnect(); // When component re-renders or unmounts: Stop observing + Avoid memory leaks + Avoid multiple observers stacking up
   }, [loading, products.length]);
 
   return (
